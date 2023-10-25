@@ -1,0 +1,6 @@
+{
+    "name": "detect-regex",
+    "version": "0.0.1",
+    "description": "Detect regex patterns in strings",
+    "type": "module"
+}  
