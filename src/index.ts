@@ -24,7 +24,7 @@ export default class Detector {
     this.log(`Initialized ${this.name} with ${this.patterns.length} patterns`);
   }
 
-  log (v: string) {
+  log(v: string) {
     if (this.debug) { console.log(v) }
   }
 
