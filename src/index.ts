@@ -1,4 +1,4 @@
-import defaultPatterns, { type Pattern } from "./patterns/index.js";
+import defaultPatterns, { type Pattern } from "./patterns";
 
 export interface PatternMatch {
   id: Pattern["id"]
@@ -21,7 +21,6 @@ export default class Detector {
     this.modifiers = 'g';
     this.patterns = patterns;
     this.matches = [];
-    this.log(`Initialized ${this.name} with ${this.patterns.length} patterns`);
   }
 
   log(v: string) {
@@ -43,15 +42,15 @@ export default class Detector {
     return this.matches;
   }
 
-  getPatternNameById(patternId: Pattern["id"]): Pattern["id"] | null {
+  getPatternById(patternId: Pattern["id"]): Pattern | null {
     const pattern = this.patterns.find((p) => p.id === patternId);
-    return pattern !== undefined ? pattern.name : null;
+    return pattern !== undefined ? pattern : null;
   }
 
   print() {
     this.matches.forEach((m) => {
       console.log(
-        `Found ${this.getPatternNameById(m.id)}: ${m.match[0]} at ${m.line}:${m.column}`
+        `Found ${this.getPatternById(m.id)?.name}: ${m.match[0]} at ${m.line}:${m.column}`
       )
     });
   }

@@ -1,9 +1,15 @@
+import group1 from './group1';
+import group2 from './group2';
+
 export interface Pattern {
   id: string;
   name: string;
-  description: string;
   pattern: RegExp;
-  category: 'generic' | 'cloud' | 'app';
+  category?: 'generic' | 'cloud' | 'app';
+  description?: string;
+  confidence?: 'high' | 'low';
+  group?: string;
+  ref?: string;
 }
 
 export default [
@@ -14,11 +20,7 @@ export default [
     category: 'generic',
     pattern: /97029097\d+696359494/,
   },
-  {
-    id: 'AWS_ACCESS_KEY_ID',
-    name: 'AWS Access Key ID',
-    description: 'AWS Access Key ID',
-    category: 'cloud',
-    pattern: /AKIA[0-9A-Z]{16}/,
-  }
+  ...group1,
+  ...group2,
 ] as Pattern[];
+
