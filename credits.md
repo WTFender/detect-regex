@@ -1,0 +1,4 @@
+- https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins
+- https://github.com/h33tlit/secret-regex-list
+- https://github.com/gitleaks/gitleaks/blob/1b3f10cb79e2d87bb5098f9b6a10b3c36eb48f6e/config/gitleaks.toml
+- https://github.com/mazen160/secrets-patterns-db/blob/master/db/rules-stable.yml

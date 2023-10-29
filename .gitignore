@@ -1,5 +1,6 @@
 todo
 xcode/
+.vscode/
 **/.DS_STORE
 **/web-ext-artifacts
 .npmrc

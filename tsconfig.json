@@ -1,0 +1,27 @@
+{
+  "compilerOptions": {
+    "target": "ES6",
+    "strict": true,
+    "moduleResolution": "Node",
+    "module": "ESNext",
+    "esModuleInterop": true,
+    "outDir": "dist",
+    "sourceMap": true,
+    "declaration": true,
+    "composite": true,
+    "declarationMap": true,
+    "noImplicitAny": true,
+    "noUncheckedIndexedAccess": true,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "rootDir": "src",
+  },
+  "include": [
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/tests",
+    "**/*.test.ts",
+  ]
+}
