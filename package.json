@@ -3,6 +3,14 @@
     "version": "0.0.2",
     "description": "Detect regex patterns in strings",
     "author": "@WTFender Michael Mc",
+    "homepage": "https://github.com/WTFender/detect-regex",
+    "bugs": {
+      "url": "https://github.com/WTFender/detect-regex/issues"
+    },
+    "repository": {
+      "type": "git",
+      "url": "https://github.com/WTFender/detect-regex.git"
+    },
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "type": "module",
