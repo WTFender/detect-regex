@@ -1,4 +1,4 @@
-import { Pattern } from "../patterns/index.js";
+import { Pattern } from "./index.js";
 
 const group = 'mazen160/secrets-patterns-db';
 const ref = 'https://github.com/mazen160/secrets-patterns-db/blob/master/db/rules-stable.yml';
@@ -827,7 +827,6 @@ const patterns: Partial<Pattern>[] = [{
   name: 'Cloudinary Credentials',
   pattern: /cloudinary:\/\/[0-9]+:[A-Za-z0-9\-_.]+@[A-Za-z0-9\-_.]+/,
   confidence: 'high',
-  example: 'cloudinary://123456789012345:ALKJdjklLJAjhkKJ45hBK92baj3@n07t21i7',
 },
 {
   name: 'Cloudmersive',
@@ -8046,7 +8045,7 @@ const patterns: Partial<Pattern>[] = [{
 }];
 
 patterns.forEach((pattern) => {
-  pattern.id = pattern.name?.replace(' ', '_').toLowerCase();
+  pattern.id = pattern.name?.replace(' ', '_').toLowerCase() + '_spd';
   pattern.group = group;
   pattern.ref = ref;
 });

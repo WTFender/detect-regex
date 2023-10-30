@@ -1,5 +1,10 @@
 import defaultPatterns, { type Pattern } from "./patterns/index";
 
+type DetectionResults = {
+  matches: PatternMatch[];
+  patterns: Pattern["id"][];
+} 
+
 export interface PatternMatch {
   id: Pattern["id"]
   match: string | string[];
@@ -27,7 +32,7 @@ export default class Detector {
     if (this.print) { console.log(v) }
   }
 
-  detect(text: string, patterns = this.patterns): PatternMatch[] {
+  detect(text: string, patterns = this.patterns): DetectionResults {
     this.matches = []; // reset
     patterns.forEach((p) => {
       this.matches = this.matches.concat(
@@ -39,7 +44,10 @@ export default class Detector {
       )
     });
     this.log(`Found ${this.matches.length} matches`);
-    return this.matches;
+    return {
+      matches: this.matches,
+      patterns: this.patterns.map((p) => p.id) as Pattern["id"][],
+    }
   }
 
   getPatternById(patternId: Pattern["id"]): Pattern | null {

@@ -1,4 +1,4 @@
-import { Pattern } from "../patterns/index.js";
+import { Pattern } from "./index.js";
 
 const group = 'h33tlit/secret-regex-list';
 const ref = 'https://github.com/h33tlit/secret-regex-list'
@@ -9,7 +9,6 @@ const patterns: Partial<Pattern>[] = [
     name: "Cloudinary",
     pattern: /cloudinary:\/\/.*/,
     category: 'app',
-    example: 'cloudinary://123456789012345:ALKJdjklLJAjhkKJ45hBK92baj3@n07t21i7',
   },
   {
     id: 'SlACK_WEBHOOK_URL',
@@ -171,7 +170,8 @@ const patterns: Partial<Pattern>[] = [
   },
 ];
 
-patterns.forEach((pattern) => { 
+patterns.forEach((pattern) => {
+  pattern.id += '_srl'
   pattern.group = group;
   pattern.ref = ref;
 });
