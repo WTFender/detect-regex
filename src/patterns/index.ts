@@ -1,9 +1,9 @@
-import curated from './curated';
-import group1 from './secrets_pattern_db';
-import group2 from './secret_regex_list';
-import group3 from './warp_secret_regex';
-import group4 from './yelp_detect_secrets';
-import group5 from './gitleaks';
+import curated from './curated.js';
+import group1 from './secrets_pattern_db.js';
+import group2 from './secret_regex_list.js';
+import group3 from './warp_secret_regex.js';
+import group4 from './yelp_detect_secrets.js';
+import group5 from './gitleaks.js';
 
 export interface Pattern {
   id: string;
@@ -12,25 +12,65 @@ export interface Pattern {
   category?: 'generic' | 'cloud' | 'app';
   description?: string;
   confidence?: 'high' | 'low';
-  group?: string;
+  group: {
+    id: string;
+    name: string;
+    ref?: string;
+  };
   ref?: string;
   example?: string;
 }
 
+const defaultPatterns = [
+  ...curated.map(data => ({...data, group: {
+    id: 'curated',
+    name: 'Curated',
+  }})),
+  ...group1.map(data => ({...data, group: {
+    id: 'spd',
+    name: 'mazen160/secrets-patterns-db',
+    ref: 'https://github.com/mazen160/secrets-patterns-db/blob/master/db/rules-stable.yml'
+  }})),
+  ...group2.map(data => ({...data, group: {
+    id: 'srl',
+    name: 'h33tlit/secret-regex-list',
+    ref: 'https://github.com/h33tlit/secret-regex-list',
+  }})),
+  ...group3.map(data => ({...data, group: {
+    id: 'warp',
+    name: 'Warp Secret Redaction',
+    ref: 'https://docs.warp.dev/features/secret-redaction',
+  }})),
+  ...group4.map(data => ({...data, group: {
+    id: 'yelp',
+    name: 'yelp/detect-secrets',
+    ref: 'https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins',
+  }})),
+  ...group5.map(data => ({...data, group: {
+    id: 'gl',
+    name: 'gitleaks/gitleaks',
+    ref: 'https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml',
+  }})),
+] as Pattern[];
+
+// set group id as pattern id suffix to deconflict
+defaultPatterns.forEach((p) => {
+  p.id = (p.id.replace(' ', '_') + '_' + p.group.id).toLocaleLowerCase();
+});
+
 export default [
   {
-    id: 'TEST',
+    id: 'test',
     name: 'Test Pattern',
     description: 'Test Pattern',
     category: 'generic',
     pattern: /97029097\d+696359494/,
-    group: 'Test',
+    group: {
+      id: 'test',
+      name: 'Test',
+      ref: 'Test',
+    },
   },
-  ...curated,
-  ...group1,
-  ...group2,
-  ...group3,
-  ...group4,
-  ...group5,
+  ...defaultPatterns,
 ] as Pattern[];
 

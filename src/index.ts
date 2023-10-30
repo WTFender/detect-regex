@@ -1,4 +1,4 @@
-import defaultPatterns, { type Pattern } from "./patterns/index";
+import defaultPatterns, { type Pattern } from "./patterns/index.js";
 
 type DetectionResults = {
   matches: PatternMatch[];

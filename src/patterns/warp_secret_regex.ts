@@ -1,8 +1,5 @@
 import { Pattern } from './index.js';
 
-const group = 'warp_secret_redaction';
-const ref = 'https://docs.warp.dev/features/secret-redaction'
-
 const patterns: Partial<Pattern>[] = [
   {
     id: 'IPV4',
@@ -101,11 +98,5 @@ const patterns: Partial<Pattern>[] = [
     category: 'app',
   },
 ];
-
-patterns.forEach((pattern) => {
-  pattern.id += '_warp';
-  pattern.group = group;
-  pattern.ref = ref;
-});
 
 export default patterns;

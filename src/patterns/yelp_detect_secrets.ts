@@ -1,8 +1,5 @@
 import { Pattern } from './index.js';
 
-const group = 'yelp_detect_secrets';
-const ref = 'https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins'
-
 const patterns: Partial<Pattern>[] = [
   {
     id: 'AWS_ACCESS_KEY_ID',
@@ -107,11 +104,5 @@ const patterns: Partial<Pattern>[] = [
     category: 'app',
   },
 ];
-
-patterns.forEach((pattern) => { 
-  pattern.id += '_yelp';
-  pattern.group = group;
-  pattern.ref = ref;
-});
 
 export default patterns;

@@ -1,7 +1,5 @@
 import { Pattern } from "../patterns/index.js";
 
-const group = 'curated';
-
 const patterns: Partial<Pattern>[] = [
   {
     id: 'CLOUDINARY_CREDENTIALS',
@@ -11,9 +9,5 @@ const patterns: Partial<Pattern>[] = [
     example: 'cloudinary://123456789012345:ALKJdjklLJAjhkKJ45hBK92baj3@n07t21i7',
   },
 ];
-
-patterns.forEach((pattern) => {
-  pattern.group = group;
-});
 
 export default patterns;

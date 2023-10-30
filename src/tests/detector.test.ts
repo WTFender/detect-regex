@@ -11,7 +11,7 @@ describe("Detector", () => {
   });
 
   test("Return test pattern by ID", () => {
-    expect(detector.getPatternById("TEST")!.name).toBe("Test Pattern");
+    expect(detector.getPatternById("test")!.name).toBe("Test Pattern");
   });
 
   test("Return defaults pattern by ID", () => {
@@ -40,7 +40,7 @@ describe("Detector", () => {
     const results = detector.detect(combinedExampleString, defaultPatterns);
     expect(results.matches.length).toBeGreaterThanOrEqual(detections);
     console.log(
-      results.matches.map((m) => `${detector.getPatternById(m.id)?.group} : ${m.id} : ${m.line} : ${m.column} : ${m.match}`)
+      results.matches.map((m) => `${detector.getPatternById(m.id)?.group.id} : ${m.id} : ${m.line} : ${m.column} : ${m.match}`)
     )
   });
 
@@ -48,7 +48,7 @@ describe("Detector", () => {
     const results = detector.detect(sampleText, defaultPatterns);
     expect(results.matches.length).toBeGreaterThanOrEqual(1);
     console.log(
-      results.matches.map((m) => `${detector.getPatternById(m.id)?.group} : ${m.id} : ${m.line} : ${m.column} : ${m.match}`)
+      results.matches.map((m) => `${detector.getPatternById(m.id)?.group.id} : ${m.id} : ${m.line} : ${m.column} : ${m.match}`)
     )
   });
 });

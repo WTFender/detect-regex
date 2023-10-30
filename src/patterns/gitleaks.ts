@@ -1,9 +1,5 @@
 import { Pattern } from './index.js';
 
-const group = 'gitleaks';
-const ref = 'https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml'
-
-
 const patterns: Partial<Pattern>[] = [
   {
     id: "adobe-client-secret",
@@ -384,12 +380,6 @@ const patterns: Partial<Pattern>[] = [
     pattern: /\b(hvs\.[a-z0-9_-]{90,100})(?:['|"|\n|\r|\s|\x60|;]|$)/,
   },
 ];
-
-patterns.forEach((pattern) => {
-  pattern.id += '_gitleaks';
-  pattern.group = group;
-  pattern.ref = ref;
-});
 
 export default patterns;
 

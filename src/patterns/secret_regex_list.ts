@@ -1,8 +1,5 @@
 import { Pattern } from "./index.js";
 
-const group = 'h33tlit/secret-regex-list';
-const ref = 'https://github.com/h33tlit/secret-regex-list'
-
 const patterns: Partial<Pattern>[] = [
   {
     id: 'CLOUDINARY_API_KEY',
@@ -169,11 +166,5 @@ const patterns: Partial<Pattern>[] = [
     pattern: /[t|T][w|W][i|I][t|T][t|T][e|E][r|R].*['|"][0-9a-zA-Z]{35,44}['|"]/,
   },
 ];
-
-patterns.forEach((pattern) => {
-  pattern.id += '_srl'
-  pattern.group = group;
-  pattern.ref = ref;
-});
 
 export default patterns;
