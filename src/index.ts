@@ -55,6 +55,28 @@ export default class Detector {
     return pattern !== undefined ? pattern : null;
   }
 
+  genPatternStats(patterns = this.patterns) {
+    // get unique tag counts
+    const patternTags = patterns.filter((p) => p.tags !== undefined && p.tags.length > 0).map((p) => p.tags).flat()
+    const uniquePatternTags: {[key: string]: number} = {};
+    [...new Set(patternTags)].forEach((tag) => {
+      if (tag !== undefined){
+        uniquePatternTags[tag]= patternTags.filter((t) => t === tag).length;
+      }
+    });
+    // sort tags
+    Object.entries(uniquePatternTags)
+      .sort(([,a],[,b]) => b-a)
+      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
+    return {
+      // get other stats
+      numPatterns: patterns.length,
+      patternExampleIds: patterns.filter((p) => p.examples !== undefined && p.examples.length > 0).map((p) => p.id),
+      patternGroupIds: [...new Set(patterns.filter((p) => p.group !== undefined).map((p) => p.group!.id))],
+      patternTags: uniquePatternTags,
+    }
+  }
+
   _lineNumberByIndex(index: number, string: string) {
     // credit EliSherer
     // https://stackoverflow.com/questions/6946466/line-number-of-the-matched-characters-in-js-node-js

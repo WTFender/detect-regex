@@ -36,6 +36,7 @@ describe("Detector", () => {
     console.log(
       results.matches.map((m) => `${detector.getPatternById(m.id)?.group?.id} : ${m.id} : ${m.line} : ${m.column} : ${m.match}`)
     )
+    console.log(detector.genPatternStats())
   });
 
 });
