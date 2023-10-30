@@ -11,12 +11,8 @@ describe("Detector", () => {
   });
 
   test("Return default patterns by ID", () => {
-    console.log(defaultPatterns.map((p) => p.id));
     defaultPatterns.forEach((p) => {
       const name = detector.getPatternById(p.id)!.name;
-      console.log(p);
-      console.log(name);
-      console.log(p.name);
       expect(name).toBe(p.name);
     });
   });
