@@ -1,28 +1,31 @@
-import defaultPatterns, { type Pattern } from "./patterns/index.js";
+import defaultPatterns, { type Pattern } from './patterns/index.js';
 
-type DetectionResults = {
+type PatternResults = {
   matches: PatternMatch[];
-  patterns: Pattern["id"][];
-} 
+  patterns: Pattern['id'][];
+};
 
 export interface PatternMatch {
-  id: Pattern["id"]
+  id: Pattern['id'];
   match: string | string[];
   line: number;
   column: number;
   replaced: boolean;
 }
 
+/**
+ * A class that detects regex patterns in text.
+ */
 export default class Detector {
   print: boolean;
   name: string;
   modifiers: string; // regex flags in string form
   patterns: Pattern[]; // regex patterns
-  results: DetectionResults; // results of last detection
+  results: PatternResults; // results of last detection
 
-  constructor(print=false, patterns: Pattern[] = defaultPatterns) {
+  constructor(print = false, patterns: Pattern[] = defaultPatterns) {
     this.print = print;
-    this.name = "RegexDetector";
+    this.name = 'RegexDetector';
     this.modifiers = 'gm';
     this.patterns = patterns;
     this.results = {
@@ -32,50 +35,95 @@ export default class Detector {
   }
 
   log(v: string) {
-    if (this.print) { console.log(v) }
+    if (this.print) {
+      console.log(v);
+    }
   }
 
-  detect(text: string, patterns = this.patterns): DetectionResults {
-    this.results = { matches: [], patterns: [], }
-    this.results.patterns = patterns.map((p) => p.id) as Pattern["id"][]
+  /**
+   * Finds patterns in the given text using the provided patterns.
+   * @param patterns - An array of patterns to search for.
+   * @param text - The text to search for patterns in.
+   * @returns An object containing the matches and patterns found.
+   */
+  findPatterns(patterns = this.patterns, text: string): PatternResults {
+    this.results = { matches: [], patterns: [] };
+    this.results.patterns = patterns.map((p) => p.id) as Pattern['id'][];
     patterns.forEach((p) => {
       this.results.matches = this.results.matches.concat(
-        this._findOccurrences(
-          p.id,
-          new RegExp(p.pattern, this.modifiers),
-          text
-        )
-      )
+        this._findOccurrences(p.id, new RegExp(p.pattern, this.modifiers), text)
+      );
     });
     this.log(`Found ${this.results.matches.length} matches`);
     return this.results;
   }
 
-  getPatternById(patternId: Pattern["id"]): Pattern | null {
+  /**
+   * Returns the pattern object with the given ID.
+   * @param patternId The ID of the pattern to retrieve.
+   * @returns The pattern object with the given ID.
+   * @throws An error if no pattern with the given ID is found.
+   */
+  getPatternById(patternId: Pattern['id']): Pattern {
     const pattern = this.patterns.find((p) => p.id === patternId);
-    return pattern !== undefined ? pattern : null;
+    if (pattern === undefined) {
+      throw new Error(`Pattern not found: ${patternId}`);
+    }
+    return pattern;
+  }
+
+  /**
+   * Generates detection statistics for the given pattern results.
+   * @param detection The pattern results to generate statistics for.
+   * @returns An object containing the pattern statistics and the sorted pattern IDs.
+   */
+  genDetectionStats(detection: PatternResults = this.results) {
+    const matchPatterns = detection.matches.map((m) =>
+      this.getPatternById(m.id)
+    );
+    return {
+      ...this.genPatternStats(matchPatterns),
+      patternIds: matchPatterns.map((p) => p?.id).sort(),
+    };
   }
 
   genPatternStats(patterns = this.patterns) {
-    // get unique tag counts
-    const patternTags = patterns.filter((p) => p.tags !== undefined && p.tags.length > 0).map((p) => p.tags).flat()
-    const uniquePatternTags: {[key: string]: number} = {};
-    [...new Set(patternTags)].forEach((tag) => {
-      if (tag !== undefined){
-        uniquePatternTags[tag]= patternTags.filter((t) => t === tag).length;
+    return {
+      patternTags: this._patternsUniqueTagCount(patterns),
+      patternExampleIds: patterns
+        .filter((p) => p.examples !== undefined && p.examples.length > 0)
+        .map((p) => p.id),
+      patternGroups: this._patternsUniqueGroupCount(patterns),
+      numPatterns: patterns.length,
+    };
+  }
+
+  _patternsUniqueGroupCount(patterns: Pattern[]) {
+    const patternGroups = patterns
+      .filter((p) => p.group !== undefined)
+      .map((p) => p.group!.id);
+    const uniquePatternGroups: { [key: string]: number } = {};
+    [...new Set(patternGroups)].forEach((grp) => {
+      if (grp !== undefined) {
+        uniquePatternGroups[grp] = patternGroups.filter(
+          (g) => g === grp
+        ).length;
       }
     });
-    // sort tags
-    Object.entries(uniquePatternTags)
-      .sort(([,a],[,b]) => b-a)
-      .reduce((r, [k, v]) => ({ ...r, [k]: v }), {});
-    return {
-      // get other stats
-      numPatterns: patterns.length,
-      patternExampleIds: patterns.filter((p) => p.examples !== undefined && p.examples.length > 0).map((p) => p.id),
-      patternGroupIds: [...new Set(patterns.filter((p) => p.group !== undefined).map((p) => p.group!.id))],
-      patternTags: uniquePatternTags,
-    }
+    return uniquePatternGroups;
+  }
+  _patternsUniqueTagCount(patterns: Pattern[]) {
+    const patternTags = patterns
+      .filter((p) => p.tags !== undefined && p.tags.length > 0)
+      .map((p) => p.tags)
+      .flat();
+    const uniquePatternTags: { [key: string]: number } = {};
+    [...new Set(patternTags)].forEach((tag) => {
+      if (tag !== undefined) {
+        uniquePatternTags[tag] = patternTags.filter((t) => t === tag).length;
+      }
+    });
+    return uniquePatternTags;
   }
 
   _lineNumberByIndex(index: number, string: string) {
@@ -112,7 +160,9 @@ export default class Detector {
         });
       }
     }
-    if (result.length) { this.log(`Found ${patternId} matches: ${result.length}`)}
+    if (result.length) {
+      this.log(`Found ${patternId} matches: ${result.length}`);
+    }
     return result as PatternMatch[];
   };
 }

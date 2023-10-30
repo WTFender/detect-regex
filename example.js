@@ -1,4 +1,4 @@
-import Detector from "detect-regex";
+import Detector from 'detect-regex';
 const detector = new Detector();
 detector.print();
 

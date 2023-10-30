@@ -10,7 +10,8 @@ const patterns: Partial<Pattern>[] = [
   {
     id: 'AWS_CONFIG_KEY',
     name: 'AWS Config Key',
-    pattern: /aws.{{0,20}}?{(?:key|pwd|pw|password|pass|token)}.{{0,20}}?['"]([0-9a-zA-Z/+]{{40}})['"]/,
+    pattern:
+      /aws.{{0,20}}?{(?:key|pwd|pw|password|pass|token)}.{{0,20}}?['"]([0-9a-zA-Z/+]{{40}})['"]/,
     tags: ['cloud', 'aws'],
   },
   {
@@ -58,11 +59,12 @@ const patterns: Partial<Pattern>[] = [
   {
     id: 'PRIVATE_KEY',
     name: 'Private Key',
-    pattern: /(PuTTY-User-Key-File-\d)|(BEGIN (DSA|EC|OPENSSH|PGP|RSA|SSH2 ENCRYPTED)? ?PRIVATE KEY( BLOCK)?)/,
+    pattern:
+      /(PuTTY-User-Key-File-\d)|(BEGIN (DSA|EC|OPENSSH|PGP|RSA|SSH2 ENCRYPTED)? ?PRIVATE KEY( BLOCK)?)/,
     tags: ['generic'],
   },
   {
-    id: 'SENDGRID_API_KEY', 
+    id: 'SENDGRID_API_KEY',
     name: 'SendGrid API Key',
     pattern: /SG\.[a-zA-Z0-9_-]{22}\.[a-zA-Z0-9_-]{43}/,
     tags: ['app', 'sendgrid'],
@@ -76,7 +78,8 @@ const patterns: Partial<Pattern>[] = [
   {
     id: 'SLACK_WEBHOOK',
     name: 'Slack Webhook URL',
-    pattern: /https:\/\/hooks\.slack\.com\/services\/T[a-zA-Z0-9_]+\/B[a-zA-Z0-9_]+\/[a-zA-Z0-9_]+/,
+    pattern:
+      /https:\/\/hooks\.slack\.com\/services\/T[a-zA-Z0-9_]+\/B[a-zA-Z0-9_]+\/[a-zA-Z0-9_]+/,
     tags: ['app', 'slack'],
     examples: ['SLACK_WEBHOOK_URL'],
   },

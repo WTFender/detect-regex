@@ -6,10 +6,9 @@ export default {
   coverageDirectory: './coverage',
   coveragePathIgnorePatterns: ['node_modules'],
   moduleNameMapper: {
-    "^(\\.\\/.+)\\.js$": "$1"
+    '^(\\.\\/.+)\\.js$': '$1',
   },
   transform: {
     '^.+\\.ts?$': ['ts-jest', { diagnostics: false }],
-    
   },
 };

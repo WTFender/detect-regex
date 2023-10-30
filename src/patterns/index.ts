@@ -21,35 +21,53 @@ export interface Pattern {
 }
 
 const defaultPatterns = [
-  ...curated.map(data => ({...data, group: {
-    id: 'curated',
-    name: 'Curated',
-  }})),
-  ...group1.map(data => ({...data, group: {
-    id: 'spd',
-    name: 'mazen160/secrets-patterns-db',
-    ref: 'https://github.com/mazen160/secrets-patterns-db/blob/master/db/rules-stable.yml'
-  }})),
-  ...group2.map(data => ({...data, group: {
-    id: 'srl',
-    name: 'h33tlit/secret-regex-list',
-    ref: 'https://github.com/h33tlit/secret-regex-list',
-  }})),
-  ...group3.map(data => ({...data, group: {
-    id: 'warp',
-    name: 'Warp Secret Redaction',
-    ref: 'https://docs.warp.dev/features/secret-redaction',
-  }})),
-  ...group4.map(data => ({...data, group: {
-    id: 'yelp',
-    name: 'yelp/detect-secrets',
-    ref: 'https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins',
-  }})),
-  ...group5.map(data => ({...data, group: {
-    id: 'gl',
-    name: 'gitleaks/gitleaks',
-    ref: 'https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml',
-  }})),
+  ...curated.map((data) => ({
+    ...data,
+    group: {
+      id: 'curated',
+      name: 'Curated',
+    },
+  })),
+  ...group1.map((data) => ({
+    ...data,
+    group: {
+      id: 'spd',
+      name: 'mazen160/secrets-patterns-db',
+      ref: 'https://github.com/mazen160/secrets-patterns-db/blob/master/db/rules-stable.yml',
+    },
+  })),
+  ...group2.map((data) => ({
+    ...data,
+    group: {
+      id: 'srl',
+      name: 'h33tlit/secret-regex-list',
+      ref: 'https://github.com/h33tlit/secret-regex-list',
+    },
+  })),
+  ...group3.map((data) => ({
+    ...data,
+    group: {
+      id: 'warp',
+      name: 'Warp Secret Redaction',
+      ref: 'https://docs.warp.dev/features/secret-redaction',
+    },
+  })),
+  ...group4.map((data) => ({
+    ...data,
+    group: {
+      id: 'yelp',
+      name: 'yelp/detect-secrets',
+      ref: 'https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins',
+    },
+  })),
+  ...group5.map((data) => ({
+    ...data,
+    group: {
+      id: 'gl',
+      name: 'gitleaks/gitleaks',
+      ref: 'https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml',
+    },
+  })),
 ].map((pattern) => ({
   // set group id as pattern id suffix to deconflict
   // normalize pattern ids
@@ -72,4 +90,3 @@ export default [
   },
   ...defaultPatterns,
 ] as Pattern[];
-

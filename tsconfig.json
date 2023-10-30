@@ -14,14 +14,8 @@
     "noUncheckedIndexedAccess": true,
     "removeComments": true,
     "preserveConstEnums": true,
-    "rootDir": "src",
+    "rootDir": "src"
   },
-  "include": [
-    "src/**/*"
-  ],
-  "exclude": [
-    "node_modules",
-    "src/tests",
-    "**/*.test.ts",
-  ]
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "src/tests", "**/*.test.ts"]
 }

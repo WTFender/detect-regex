@@ -10,7 +10,8 @@ const patterns: Partial<Pattern>[] = [
   {
     id: 'IPV6',
     name: 'IPV6 Address',
-    pattern: /\b((([0-9A-Fa-f]{1,4}:){1,6}:)|(([0-9A-Fa-f]{1,4}:){7}))([0-9A-Fa-f]{1,4})\b/,
+    pattern:
+      /\b((([0-9A-Fa-f]{1,4}:){1,6}:)|(([0-9A-Fa-f]{1,4}:){7}))([0-9A-Fa-f]{1,4})\b/,
     tags: ['generic', 'network'],
   },
   {
@@ -34,7 +35,8 @@ const patterns: Partial<Pattern>[] = [
   {
     id: 'MAC_ADDRESS',
     name: 'MAC Address',
-    pattern: /\b((([a-zA-z0-9]{2}[-:]){5}([a-zA-z0-9]{2}))|(([a-zA-z0-9]{2}:){5}([a-zA-z0-9]{2})))\b/,
+    pattern:
+      /\b((([a-zA-z0-9]{2}[-:]){5}([a-zA-z0-9]{2}))|(([a-zA-z0-9]{2}:){5}([a-zA-z0-9]{2})))\b/,
     tags: ['generic', 'network'],
   },
   {
@@ -82,7 +84,8 @@ const patterns: Partial<Pattern>[] = [
   {
     id: 'HEROKU_API_KEY',
     name: 'Heroku API Key',
-    pattern: /\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b/,
+    pattern:
+      /\b[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}\b/,
     tags: ['app'],
   },
   {
