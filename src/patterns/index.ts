@@ -9,16 +9,15 @@ export interface Pattern {
   id: string;
   name: string;
   pattern: RegExp;
-  category?: 'generic' | 'cloud' | 'app';
   description?: string;
   confidence?: 'high' | 'low';
+  tags?: string[];
   group: {
     id: string;
     name: string;
     ref?: string;
   };
-  ref?: string;
-  example?: string;
+  examples?: string[];
 }
 
 const defaultPatterns = [
@@ -51,12 +50,12 @@ const defaultPatterns = [
     name: 'gitleaks/gitleaks',
     ref: 'https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml',
   }})),
-] as Pattern[];
-
-// set group id as pattern id suffix to deconflict
-defaultPatterns.forEach((p) => {
-  p.id = (p.id.replace(' ', '_') + '_' + p.group.id).toLocaleLowerCase();
-});
+].map((pattern) => ({
+  // set group id as pattern id suffix to deconflict
+  // normalize pattern ids
+  ...pattern,
+  id: (pattern.id?.replace(/\s/m, '_') + '_' + pattern.group!.id).toLowerCase(),
+})) as Pattern[];
 
 export default [
   {

@@ -348,6 +348,7 @@ const patterns: Partial<Pattern>[] = [
     id: "slack-webhook-url",
     name: "Slack Webhook",
     pattern: /(https?:\/\/)?hooks.slack.com\/(services|workflows)\/[A-Za-z0-9+/]{43,46}/,
+    examples: ['SLACK_WEBHOOK_URL'],
   },
   {
     id: "square-access-token",

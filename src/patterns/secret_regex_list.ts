@@ -5,14 +5,18 @@ const patterns: Partial<Pattern>[] = [
     id: 'CLOUDINARY_API_KEY',
     name: "Cloudinary",
     pattern: /cloudinary:\/\/.*/,
-    category: 'app',
+    tags: ['app', 'cloudinary'],
   },
+  /*
+  disabled `{8}` is not right
   {
     id: 'SlACK_WEBHOOK_URL',
     name: "Slack Webhook URL",
     pattern: /https:\/\/hooks\.slack\.com\/services\/T[a-zA-Z0-9_]{8}\/B[a-zA-Z0-9_]{8}\/[a-zA-Z0-9_]{24}/,
     category: 'app',
+    // examples: ['SLACK_WEBHOOK_URL']
   },
+  */
   {
     id: 'PASSWORD_URL',
     name: "Password in URL",
