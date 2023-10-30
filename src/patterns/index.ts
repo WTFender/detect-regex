@@ -72,7 +72,11 @@ const defaultPatterns = [
   // set group id as pattern id suffix to deconflict
   // normalize pattern ids
   ...pattern,
-  id: (pattern.id?.replace(/\s/m, '_') + '_' + pattern.group!.id).toLowerCase(),
+  id: (
+    pattern.id?.replaceAll(' ', '_') +
+    '_' +
+    pattern.group!.id
+  ).toLowerCase(),
 })) as Pattern[];
 
 export default [
