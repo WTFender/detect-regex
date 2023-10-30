@@ -18,14 +18,17 @@ export default class Detector {
   name: string;
   modifiers: string; // regex flags in string form
   patterns: Pattern[]; // regex patterns
-  matches: PatternMatch[]; // matches found
+  results: DetectionResults; // results of last detection
 
   constructor(print=false, patterns: Pattern[] = defaultPatterns) {
     this.print = print;
     this.name = "RegexDetector";
     this.modifiers = 'gm';
     this.patterns = patterns;
-    this.matches = [];
+    this.results = {
+      matches: [],
+      patterns: [],
+    };
   }
 
   log(v: string) {
@@ -33,9 +36,10 @@ export default class Detector {
   }
 
   detect(text: string, patterns = this.patterns): DetectionResults {
-    this.matches = []; // reset
+    this.results = { matches: [], patterns: [], }
+    this.results.patterns = patterns.map((p) => p.id) as Pattern["id"][]
     patterns.forEach((p) => {
-      this.matches = this.matches.concat(
+      this.results.matches = this.results.matches.concat(
         this._findOccurrences(
           p.id,
           new RegExp(p.pattern, this.modifiers),
@@ -43,11 +47,8 @@ export default class Detector {
         )
       )
     });
-    this.log(`Found ${this.matches.length} matches`);
-    return {
-      matches: this.matches,
-      patterns: this.patterns.map((p) => p.id) as Pattern["id"][],
-    }
+    this.log(`Found ${this.results.matches.length} matches`);
+    return this.results;
   }
 
   getPatternById(patternId: Pattern["id"]): Pattern | null {
