@@ -9,6 +9,7 @@ const patterns: Partial<Pattern>[] = [
     name: "Cloudinary",
     pattern: /cloudinary:\/\/.*/,
     category: 'app',
+    example: 'cloudinary://123456789012345:ALKJdjklLJAjhkKJ45hBK92baj3@n07t21i7',
   },
   {
     id: 'SlACK_WEBHOOK_URL',
@@ -162,6 +163,7 @@ const patterns: Partial<Pattern>[] = [
     name: "Twitter Access Token",
     pattern: /[t|T][w|W][i|I][t|T][t|T][e|E][r|R].*[1-9][0-9]+-[0-9a-zA-Z]{40}/,
   },
+  
   {
     id: 'TWITTER_OAUTH',
     name: "Twitter OAuth",

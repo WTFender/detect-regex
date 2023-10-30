@@ -1,4 +1,4 @@
-import defaultPatterns, { type Pattern } from "./patterns";
+import defaultPatterns, { type Pattern } from "./patterns/index";
 
 export interface PatternMatch {
   id: Pattern["id"]
@@ -9,27 +9,27 @@ export interface PatternMatch {
 }
 
 export default class Detector {
-  debug: boolean;
+  print: boolean;
   name: string;
   modifiers: string; // regex flags in string form
   patterns: Pattern[]; // regex patterns
   matches: PatternMatch[]; // matches found
 
-  constructor(patterns: Pattern[] = defaultPatterns) {
-    this.debug = true;
+  constructor(print=false, patterns: Pattern[] = defaultPatterns) {
+    this.print = print;
     this.name = "RegexDetector";
-    this.modifiers = 'g';
+    this.modifiers = 'gm';
     this.patterns = patterns;
     this.matches = [];
   }
 
   log(v: string) {
-    if (this.debug) { console.log(v) }
+    if (this.print) { console.log(v) }
   }
 
-  detect(text: string) {
+  detect(text: string, patterns = this.patterns): PatternMatch[] {
     this.matches = []; // reset
-    this.patterns.forEach((p) => {
+    patterns.forEach((p) => {
       this.matches = this.matches.concat(
         this._findOccurrences(
           p.id,
@@ -45,14 +45,6 @@ export default class Detector {
   getPatternById(patternId: Pattern["id"]): Pattern | null {
     const pattern = this.patterns.find((p) => p.id === patternId);
     return pattern !== undefined ? pattern : null;
-  }
-
-  print() {
-    this.matches.forEach((m) => {
-      console.log(
-        `Found ${this.getPatternById(m.id)?.name}: ${m.match[0]} at ${m.line}:${m.column}`
-      )
-    });
   }
 
   _lineNumberByIndex(index: number, string: string) {
@@ -76,20 +68,20 @@ export default class Detector {
     while ((match = needle.exec(haystack))) {
       const pos = this._lineNumberByIndex(needle.lastIndex, haystack);
       this.log(`Found match: ${match}, ${pos[0]}`);
-      if (pos[0] === 0 && pos[1] === 0) {
+      if (pos[0] === undefined || pos[1] === undefined) {
+        // TODO handle
+        this.log(`Skipping match: ${match}`);
+      } else {
         result.push({
           id: patternId,
-          match: match,
+          match: match[0],
           line: pos[0],
           column: needle.lastIndex - pos[1] - match[0].length,
           replaced: false,
         });
-      } else {
-        // TODO handle
-        this.log(`Skipping match: ${match}`);
       }
     }
-    this.log(`Found ${patternId} matches: ${result.length}`);
+    if (result.length) { this.log(`Found ${patternId} matches: ${result.length}`)}
     return result as PatternMatch[];
   };
 }

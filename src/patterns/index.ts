@@ -10,6 +10,7 @@ export interface Pattern {
   confidence?: 'high' | 'low';
   group?: string;
   ref?: string;
+  example?: string;
 }
 
 export default [
