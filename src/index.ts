@@ -15,15 +15,21 @@ export interface PatternMatch {
 
 /**
  * A class that detects regex patterns in text.
+ * @class @constructor @public
+ * @param print Whether to print the results to the console.
+ * @param patterns An array of regex patterns to detect. Defaults to the patterns in `src/patterns/index.ts`.
+ * @property {string} modifiers The regex modifiers to use when detecting patterns. Default 'gm'.
+ * @property {Pattern[]} patterns The regex patterns to detect. Defaults to the patterns in `src/patterns/index.ts`.
+ * @property {PatternResults} results The results of the last detection.
  */
 export default class Detector {
   print: boolean;
   name: string;
-  modifiers: string; // regex flags in string form
-  patterns: Pattern[]; // regex patterns
-  results: PatternResults; // results of last detection
+  modifiers: string;
+  patterns: Pattern[];
+  results: PatternResults;
 
-  constructor(print = false, patterns: Pattern[] = defaultPatterns) {
+  constructor(print: boolean = false, patterns: Pattern[] = defaultPatterns) {
     this.print = print;
     this.name = 'RegexDetector';
     this.modifiers = 'gm';
