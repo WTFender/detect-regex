@@ -1647,15 +1647,9 @@ const patterns: Partial<Pattern>[] = [
     confidence: 'high',
   },
   {
-    id: 'FCM Server Key',
+    id: 'fcm_server_key',
     name: 'FCM Server Key',
     pattern: /AAAA[a-zA-Z0-9_-]{7}:[a-zA-Z0-9_-]{140}/,
-    confidence: 'low',
-  },
-  {
-    id: 'FCM_server_key',
-    name: 'FCM_server_key',
-    pattern: /(AAAA[a-zA-Z0-9_-]{7}:[a-zA-Z0-9_-]{140})/,
     confidence: 'low',
   },
   {
