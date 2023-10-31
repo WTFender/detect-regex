@@ -1,6 +1,6 @@
 {
   "name": "detect-regex",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Detect regex patterns in strings",
   "author": "@WTFender Michael Mc",
   "homepage": "https://github.com/WTFender/detect-regex",
