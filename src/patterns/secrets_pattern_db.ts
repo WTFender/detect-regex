@@ -757,7 +757,7 @@ const patterns: Partial<Pattern>[] = [
     confidence: 'high',
   },
   {
-    id: 'Braintree API Key',
+    id: 'paypal_braintree_access_token',
     name: 'Braintree API Key',
     pattern: /access_token$production$[0-9a-z]{16}$[0-9a-f]{32}/,
     confidence: 'high',
@@ -3346,18 +3346,6 @@ const patterns: Partial<Pattern>[] = [
     confidence: 'high',
   },
   {
-    id: 'PayPal Braintree access token',
-    name: 'PayPal Braintree access token',
-    pattern: /access_token\$production\$[0-9a-z]{16}\$[0-9a-f]{32}/,
-    confidence: 'high',
-  },
-  {
-    id: 'Paymoapp',
-    name: 'Paymoapp',
-    pattern: /(?:paymoapp).{0,40}\b([a-zA-Z0-9]{44})\b/,
-    confidence: 'high',
-  },
-  {
     id: 'Paymongo',
     name: 'Paymongo',
     pattern: /(?:paymongo).{0,40}\b([a-zA-Z0-9_]{32})\b/,
@@ -4848,7 +4836,7 @@ const patterns: Partial<Pattern>[] = [
     confidence: 'high',
   },
   {
-    id: 'Twilio API Key',
+    id: 'twilio_api_key',
     name: 'Twilio API Key',
     pattern: /SK[0-9a-fA-F]{32}/,
     confidence: 'high',
@@ -7968,12 +7956,6 @@ const patterns: Partial<Pattern>[] = [
     confidence: 'low',
   },
   {
-    id: 'paypal_braintree_access_token',
-    name: 'paypal_braintree_access_token',
-    pattern: /(access_token$production$[0-9a-z]{16}$[0-9a-f]{32})/,
-    confidence: 'low',
-  },
-  {
     id: 'paypal_client_secret',
     name: 'paypal_client_secret',
     pattern: /paypal[_-]?client[_-]?secret(=| =|:| :)/,
@@ -9100,13 +9082,7 @@ const patterns: Partial<Pattern>[] = [
     pattern: /trex[_-]?okta[_-]?client[_-]?token(=| =|:| :)/,
     confidence: 'low',
   },
-  {
-    id: 'twilio_api_key',
-    name: 'twilio_api_key',
-    pattern: /twilio[_-]?api[_-]?key(=| =|:| :)/,
-    confidence: 'high',
-    tags: ['app', 'twilio'],
-  },
+
   {
     id: 'twilio_api_secret',
     name: 'twilio_api_secret',
