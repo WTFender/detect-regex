@@ -7356,12 +7356,6 @@ const patterns: Partial<Pattern>[] = [
     confidence: 'high',
   },
   {
-    id: 'mailchimp_api_key',
-    name: 'mailchimp_api_key',
-    pattern: /mailchimp[_-]?api[_-]?key(=| =|:| :)/,
-    confidence: 'low',
-  },
-  {
     id: 'mailchimp_key',
     name: 'mailchimp_key',
     pattern: /mailchimp[_-]?key(=| =|:| :)/,
