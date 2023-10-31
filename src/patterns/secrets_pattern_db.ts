@@ -1653,12 +1653,6 @@ const patterns: Partial<Pattern>[] = [
     confidence: 'low',
   },
   {
-    id: 'Facebook Access Token',
-    name: 'Facebook Access Token',
-    pattern: /EAACEdEose0cBA[0-9A-Za-z]+/,
-    confidence: 'high',
-  },
-  {
     id: 'Facebookoauth',
     name: 'Facebookoauth',
     pattern: /(?:facebook).{0,40}\b([A-Za-z0-9]{32})\b/,
@@ -6543,8 +6537,8 @@ const patterns: Partial<Pattern>[] = [
   },
   {
     id: 'facebook_access_token',
-    name: 'facebook_access_token',
-    pattern: /(EAACEdEose0cBA[0-9A-Za-z]+)/,
+    name: 'Facebook Access Token',
+    pattern: /EAACEdEose0cBA[0-9A-Za-z]+/,
     confidence: 'high',
   },
   {
