@@ -23,7 +23,8 @@ describe('Detector', () => {
         // combine examples into multilinestring
         const examples = p.examples.map((ex) => sampleSecrets[ex]).join('\n');
         const results = detector.findPatterns([p], examples);
-        expect(results.matches.length).toBe(1);
+        console.log(results);
+        expect(results.matches.length).toBe(p.examples.length);
         expect(results.matches[0].column).toBe(0);
         expect(results.matches[0].line).toBe(0);
       }

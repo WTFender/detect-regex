@@ -4449,30 +4449,38 @@ const patterns: Partial<Pattern>[] = [
     name: 'Stripe',
     pattern: /[rs]k_live_[a-zA-Z0-9]{20,30}/,
     confidence: 'high',
+    examples: ['STRIPE_SECRET_KEY', 'STRIPE_RESTRICTED_KEY'],
   },
   {
     id: 'Stripe API Key - 1',
     name: 'Stripe API Key - 1',
     pattern: /sk_live_[0-9a-zA-Z]{24}/,
     confidence: 'high',
+    examples: ['STRIPE_SECRET_KEY'],
   },
+  /*
+  bad detections
   {
     id: 'Stripe API key - 2',
     name: 'Stripe API key - 2',
     pattern: /stripe[sr]k_live_[0-9a-zA-Z]{24}/,
     confidence: 'high',
+    examples: ['STRIPE_SECRET_KEY', 'STRIPE_RESTRICTED_KEY'],
   },
   {
     id: 'Stripe API key - 3',
     name: 'Stripe API key - 3',
     pattern: /stripe[sk|rk]_live_[0-9a-zA-Z]{24}/,
     confidence: 'high',
+    examples: ['STRIPE_SECRET_KEY', 'STRIPE_RESTRICTED_KEY'],
   },
+*/
   {
     id: 'Stripe Public Live Key',
     name: 'Stripe Public Live Key',
     pattern: /pk_live_[0-9a-z]{24}/,
     confidence: 'high',
+    examples: ['STRIPE_PUBLIC_KEY'],
   },
   {
     id: 'Stripe Public Test Key',
@@ -4485,24 +4493,28 @@ const patterns: Partial<Pattern>[] = [
     name: 'Stripe Restriced Key',
     pattern: /rk_(?:live|test)_[0-9a-zA-Z]{24}/,
     confidence: 'high',
+    examples: ['STRIPE_RESTRICTED_KEY'],
   },
   {
     id: 'Stripe Restricted API Key',
     name: 'Stripe Restricted API Key',
     pattern: /rk_live_[0-9a-zA-Z]{24}/,
     confidence: 'high',
+    examples: ['STRIPE_RESTRICTED_KEY'],
   },
   {
     id: 'Stripe Secret Key',
     name: 'Stripe Secret Key',
     pattern: /sk_(?:live|test)_[0-9a-zA-Z]{24}/,
     confidence: 'high',
+    examples: ['STRIPE_SECRET_KEY'],
   },
   {
     id: 'Stripe Secret Live Key',
     name: 'Stripe Secret Live Key',
     pattern: /(sk|rk)_live_[0-9a-z]{24}/,
     confidence: 'high',
+    examples: ['STRIPE_SECRET_KEY', 'STRIPE_RESTRICTED_KEY'],
   },
   {
     id: 'Stripe Secret Test Key',

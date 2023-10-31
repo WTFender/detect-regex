@@ -91,8 +91,9 @@ const patterns: Partial<Pattern>[] = [
   {
     id: 'STRIPE_API_KEY',
     name: 'Stripe API Key',
-    pattern: /\b(?:r|s)k_(test|live)_[0-9a-zA-Z]{24}\b/,
+    pattern: /\b(?:r|s)k_(test|live)_[0-9a-zA-Z]{24,99}\b/,
     tags: ['app', 'stripe'],
+    examples: ['STRIPE_SECRET_KEY', 'STRIPE_RESTRICTED_KEY'],
   },
   {
     id: 'FIREBASE_AUTH_DOMAIN',

@@ -368,8 +368,9 @@ const patterns: Partial<Pattern>[] = [
   {
     id: 'stripe-access-token',
     name: 'Stripe Access Token',
-    pattern:
-      /\b((sk|pk)_(test|live)_[0-9a-z]{10,32})(?:['|"|\n|\r|\s|\x60|;]|$)/,
+    pattern: /\b((sk|pk)_(test|live)_[0-9a-z]{10,99})/,
+    examples: ['STRIPE_SECRET_KEY', 'STRIPE_PUBLIC_KEY'],
+    confidence: 'high',
   },
   {
     id: 'telegram-bot-api-token',

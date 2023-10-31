@@ -32,7 +32,7 @@ export default class Detector {
   constructor(print: boolean = false, patterns: Pattern[] = defaultPatterns) {
     this.print = print;
     this.name = 'RegexDetector';
-    this.modifiers = 'gm';
+    this.modifiers = 'gmi';
     this.patterns = patterns;
     this.results = {
       matches: [],

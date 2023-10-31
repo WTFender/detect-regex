@@ -140,11 +140,13 @@ const patterns: Partial<Pattern>[] = [
     id: 'STRIPE_API_KEY',
     name: 'Stripe API Key',
     pattern: /sk_live_[0-9a-zA-Z]{24}/,
+    examples: ['STRIPE_SECRET_KEY'],
   },
   {
     id: 'STRIPE_RESTRICTED_API_KEY',
     name: 'Stripe Restricted API Key',
     pattern: /rk_live_[0-9a-zA-Z]{24}/,
+    examples: ['STRIPE_RESTRICTED_KEY'],
   },
   {
     id: 'SQUARE_ACCESS_TOKEN',

@@ -10,7 +10,7 @@ export interface Pattern {
   name: string;
   pattern: RegExp;
   description?: string;
-  confidence?: 'high' | 'low';
+  confidence?: 'curated' | 'high' | 'low';
   tags?: string[];
   group: {
     id: string;

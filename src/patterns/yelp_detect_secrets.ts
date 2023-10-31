@@ -94,6 +94,7 @@ const patterns: Partial<Pattern>[] = [
     name: 'Stripe API Key',
     pattern: /(?:r|s)k_live_[0-9a-zA-Z]{24}/,
     tags: ['app', 'stripe'],
+    examples: ['STRIPE_SECRET_KEY', 'STRIPE_RESTRICTED_KEY'],
   },
   {
     id: 'TWILIO_SID',
