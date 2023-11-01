@@ -1,6 +1,6 @@
 {
   "name": "detect-regex",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Detect regex patterns in strings",
   "author": "@WTFender Michael Mc",
   "homepage": "https://github.com/WTFender/detect-regex",
@@ -22,10 +22,10 @@
   ],
   "scripts": {
     "demo": "cd demo && npm run dev",
-    "build": "tsc",
     "test": "jest",
     "test:watch": "jest --watchAll",
-    "format": "prettier --config .prettierrc --write ."
+    "format": "prettier --config .prettierrc --write .",
+    "build": "tsc"
   },
   "files": [
     "dist",
