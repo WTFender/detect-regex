@@ -10,14 +10,14 @@ describe('Detector', () => {
     expect(detector.name).toBe('RegexDetector');
   });
 
-  test('Return default patterns by ID', () => {
+  test('Return patterns by ID', () => {
     defaultPatterns.forEach((p) => {
       const name = detector.getPatternById(p.id)!.name;
       expect(name).toBe(p.name);
     });
   });
 
-  test('Test pattern examples individually', () => {
+  test('Test individual patterns against secret examples', () => {
     defaultPatterns.forEach((p) => {
       if (p.examples !== undefined) {
         // combine examples into multilinestring
@@ -31,7 +31,7 @@ describe('Detector', () => {
     });
   });
 
-  test('Test combined patterns on secrets', () => {
+  test('Test all patterns against combined secret examples', () => {
     const results = detector.findPatterns(
       defaultPatterns,
       JSON.stringify(sampleSecrets)
