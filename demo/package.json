@@ -1,0 +1,17 @@
+{
+  "name": "detect-regex-demo",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "demo": "vite"
+  },
+  "dependencies": {
+    "detect-regex": "file:..",
+    "vue": "^3.3.4",
+    "vue3-json-viewer": "^2.2.2"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.3.1",
+    "vite": "^4.4.9"
+  }
+}

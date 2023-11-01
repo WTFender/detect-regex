@@ -13,6 +13,7 @@ describe('Detector', () => {
   test('Load default patterns', () => {
     patternStats = detector.genPatternStats();
     expect(patternStats.numPatterns).toBe(defaultPatterns.length);
+    console.log(patternStats);
   });
 
   test('Return patterns by ID', () => {

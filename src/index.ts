@@ -18,6 +18,7 @@ export type DetectionResults = {
 /* Summary pattern stats */
 export interface PatternStats {
   numPatterns: number;
+  numPatternsUntagged: number;
   patternExampleIds: Pattern['id'][];
   patternGroups: {
     [key: string]: number;
@@ -124,6 +125,9 @@ export default class Detector {
         .map((p) => p.id),
       patternGroups: this._patternsUniqueGroupCount(patterns),
       numPatterns: patterns.length,
+      numPatternsUntagged: patterns.filter(
+        (p) => p.tags === undefined || p.tags.length === 0
+      ).length,
     };
   }
 

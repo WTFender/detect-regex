@@ -21,7 +21,7 @@
     "pattern"
   ],
   "scripts": {
-    "demo": "cd demo && npm run dev",
+    "demo": "cd demo && npm run demo",
     "test": "jest",
     "test:watch": "jest --watchAll",
     "format": "prettier --config .prettierrc --write .",
