@@ -2,6 +2,20 @@
 
 Detect regex patterns in strings
 
+## Install
+
+```
+npm i detect-regex
+```
+
+## Demo
+
+```
+npm run demo
+```
+
+## Usage
+
 ```javascript
 import Detector from 'detect-regex';
 
