@@ -1,6 +1,6 @@
 {
   "name": "detect-regex",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "Detect regex patterns in strings",
   "author": "@WTFender Michael Mc",
   "homepage": "https://github.com/WTFender/detect-regex",
@@ -21,6 +21,7 @@
     "pattern"
   ],
   "scripts": {
+    "demo": "cd demo && npm run dev",
     "build": "tsc",
     "test": "jest",
     "test:watch": "jest --watchAll",
