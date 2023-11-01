@@ -1,16 +1,36 @@
 import defaultPatterns, { type Pattern } from './patterns/index.js';
 
-type PatternResults = {
-  matches: PatternMatch[];
-  patterns: Pattern['id'][];
-};
-
+/* Pattern match result. */
 export interface PatternMatch {
   id: Pattern['id'];
   match: string | string[];
   line: number;
   column: number;
   replaced: boolean;
+}
+
+/* Matches of a pattern(s). Include the patterns that were searched for. */
+export type DetectionResults = {
+  matches: PatternMatch[];
+  patterns: Pattern['id'][];
+};
+
+/* Summary pattern stats */
+export interface PatternStats {
+  numPatterns: number;
+  patternExampleIds: Pattern['id'][];
+  patternGroups: {
+    [key: string]: number;
+  };
+  patternTags: {
+    [key: string]: number;
+  };
+}
+
+/* Include the matched and searched patterns. */
+export interface PatternMatchStats extends PatternStats {
+  patternIds: Pattern['id'][];
+  matchPatternIds: Pattern['id'][];
 }
 
 /**
@@ -20,21 +40,21 @@ export interface PatternMatch {
  * @param patterns An array of regex patterns to detect. Defaults to the patterns in `src/patterns/index.ts`.
  * @property {string} modifiers The regex modifiers to use when detecting patterns. Default 'gm'.
  * @property {Pattern[]} patterns The regex patterns to detect. Defaults to the patterns in `src/patterns/index.ts`.
- * @property {PatternResults} results The results of the last detection.
+ * @property {DetectionResults} detection The results of the last detection.
  */
 export default class Detector {
   print: boolean;
   name: string;
   modifiers: string;
   patterns: Pattern[];
-  results: PatternResults;
+  detection: DetectionResults;
 
   constructor(print: boolean = false, patterns: Pattern[] = defaultPatterns) {
     this.print = print;
     this.name = 'RegexDetector';
     this.modifiers = 'gmi';
     this.patterns = patterns;
-    this.results = {
+    this.detection = {
       matches: [],
       patterns: [],
     };
@@ -52,16 +72,16 @@ export default class Detector {
    * @param text - The text to search for patterns in.
    * @returns An object containing the matches and patterns found.
    */
-  findPatterns(patterns = this.patterns, text: string): PatternResults {
-    this.results = { matches: [], patterns: [] };
-    this.results.patterns = patterns.map((p) => p.id) as Pattern['id'][];
+  detect(patterns = this.patterns, text: string): DetectionResults {
+    this.detection = { matches: [], patterns: [] };
+    this.detection.patterns = patterns.map((p) => p.id) as Pattern['id'][];
     patterns.forEach((p) => {
-      this.results.matches = this.results.matches.concat(
+      this.detection.matches = this.detection.matches.concat(
         this._findOccurrences(p.id, new RegExp(p.pattern, this.modifiers), text)
       );
     });
-    this.log(`Found ${this.results.matches.length} matches`);
-    return this.results;
+    this.log(`Found ${this.detection.matches.length} matches`);
+    return this.detection;
   }
 
   /**
@@ -79,21 +99,24 @@ export default class Detector {
   }
 
   /**
-   * Generates detection statistics for the given pattern results.
-   * @param detection The pattern results to generate statistics for.
+   * Generates detection statistics for the given or most recent detection.
+   * @param detection The detection results to generate statistics for.
    * @returns An object containing the pattern statistics and the sorted pattern IDs.
    */
-  genDetectionStats(detection: PatternResults = this.results) {
+  genDetectionStats(
+    detection: DetectionResults = this.detection
+  ): PatternMatchStats {
     const matchPatterns = detection.matches.map((m) =>
       this.getPatternById(m.id)
     );
     return {
       ...this.genPatternStats(matchPatterns),
       patternIds: matchPatterns.map((p) => p?.id).sort(),
+      matchPatternIds: detection.matches.map((m) => m.id).sort(),
     };
   }
 
-  genPatternStats(patterns = this.patterns) {
+  genPatternStats(patterns = this.patterns): PatternStats {
     return {
       patternTags: this._patternsUniqueTagCount(patterns),
       patternExampleIds: patterns

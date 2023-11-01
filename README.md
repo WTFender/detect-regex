@@ -6,10 +6,7 @@ Detect regex patterns in strings
 import Detector from 'detect-regex';
 
 const detector = new Detector();
-const detections = detector.findPatterns(
-  detector.patterns,
-  'AKIAIOSFODNN7EXAMPLE'
-);
+const detections = detector.detect(detector.patterns, 'AKIAIOSFODNN7EXAMPLE');
 
 console.log(detections.matches[0]);
 /*  id: 'aws_api_key_spd',

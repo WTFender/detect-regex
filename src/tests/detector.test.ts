@@ -1,13 +1,18 @@
-import Detector from '../index';
+import Detector, { PatternMatchStats, DetectionResults } from '../index';
 import defaultPatterns from '../patterns';
 import sampleSecrets from './secrets';
 
 describe('Detector', () => {
   let detector: Detector;
-
   test('Instantiate detector', () => {
     detector = new Detector();
     expect(detector.name).toBe('RegexDetector');
+  });
+
+  let patternStats;
+  test('Load default patterns', () => {
+    patternStats = detector.genPatternStats();
+    expect(patternStats.numPatterns).toBe(defaultPatterns.length);
   });
 
   test('Return patterns by ID', () => {
@@ -17,35 +22,34 @@ describe('Detector', () => {
     });
   });
 
-  test('Test individual patterns against secret examples', () => {
+  test('Find individual pattern examples', () => {
     defaultPatterns.forEach((p) => {
       if (p.examples !== undefined) {
         // combine examples into multilinestring
         const examples = p.examples.map((ex) => sampleSecrets[ex]).join('\n');
-        const results = detector.findPatterns([p], examples);
-        console.log(results);
-        expect(results.matches.length).toBe(p.examples.length);
-        expect(results.matches[0].column).toBe(0);
-        expect(results.matches[0].line).toBe(0);
+        // expect pattern match for each example
+        expect(p.examples.length).toBe(
+          detector.detect([p], examples).matches.length
+        );
       }
     });
   });
 
-  test('Test all patterns against combined secret examples', () => {
-    const results = detector.findPatterns(
-      defaultPatterns,
-      JSON.stringify(sampleSecrets)
-    );
-    expect(results.matches.length).toBeGreaterThanOrEqual(1);
-    console.log(
-      results.matches.map(
-        (m) =>
-          `${detector.getPatternById(m.id)?.group?.id} : ${m.id} : ${
-            m.line
-          } : ${m.column} : ${m.match}`
-      )
-    );
-    console.log(detector.genPatternStats());
-    console.log(detector.genDetectionStats(results));
+  let detection: DetectionResults;
+  test('Find all patterns in combined examples', () => {
+    detection = detector.detect(defaultPatterns, JSON.stringify(sampleSecrets));
+    const patternMatchIds = detection.matches.map((m) => m.id);
+    // expect each pattern with an example to have a match
+    patternStats.patternExampleIds.forEach((patternId) => {
+      expect(patternMatchIds).toContain(patternId);
+    });
+  });
+
+  let detectionStats: PatternMatchStats;
+  test('Parse detection stats', () => {
+    detectionStats = detector.genDetectionStats();
+    patternStats.patternExampleIds.forEach((patternId) => {
+      expect(detectionStats.matchPatternIds).toContain(patternId);
+    });
   });
 });
