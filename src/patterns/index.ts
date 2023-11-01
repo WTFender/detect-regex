@@ -20,48 +20,49 @@ export interface Pattern {
   examples?: string[];
 }
 
-const defaultPatterns = [
-  ...curated.map((data) => ({
-    ...data,
+// set group info for each pattern group
+const defaultPatterns: Partial<Pattern>[] = [
+  ...curated.map((p) => ({
+    ...p,
     group: {
       id: 'curated',
       name: 'Curated',
     },
   })),
-  ...group1.map((data) => ({
-    ...data,
+  ...group1.map((p) => ({
+    ...p,
     group: {
       id: 'spd',
       name: 'mazen160/secrets-patterns-db',
       ref: 'https://github.com/mazen160/secrets-patterns-db/blob/master/db/rules-stable.yml',
     },
   })),
-  ...group2.map((data) => ({
-    ...data,
+  ...group2.map((p) => ({
+    ...p,
     group: {
       id: 'srl',
       name: 'h33tlit/secret-regex-list',
       ref: 'https://github.com/h33tlit/secret-regex-list',
     },
   })),
-  ...group3.map((data) => ({
-    ...data,
+  ...group3.map((p) => ({
+    ...p,
     group: {
       id: 'warp',
-      name: 'Warp Secret Redaction',
+      name: 'warp.dev',
       ref: 'https://docs.warp.dev/features/secret-redaction',
     },
   })),
-  ...group4.map((data) => ({
-    ...data,
+  ...group4.map((p) => ({
+    ...p,
     group: {
       id: 'yelp',
       name: 'yelp/detect-secrets',
       ref: 'https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins',
     },
   })),
-  ...group5.map((data) => ({
-    ...data,
+  ...group5.map((p) => ({
+    ...p,
     group: {
       id: 'gl',
       name: 'gitleaks/gitleaks',
@@ -77,7 +78,7 @@ const defaultPatterns = [
     '_' +
     pattern.group!.id
   ).toLowerCase(),
-})) as Pattern[];
+}));
 
 export default [
   {
