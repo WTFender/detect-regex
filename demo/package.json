@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "demo": "vite"
+    "demo": "vite",
+    "build": "vite build"
   },
   "dependencies": {
     "detect-regex": "file:..",
