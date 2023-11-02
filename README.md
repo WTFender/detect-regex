@@ -10,6 +10,8 @@ npm i detect-regex
 
 ### Demo
 
+https://detect-regex.wtfender.com
+
 ```
 npm run demo
 ```
