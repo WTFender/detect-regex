@@ -2,19 +2,19 @@
 
 Detect regex patterns in strings
 
-## Install
+### Install
 
 ```
 npm i detect-regex
 ```
 
-## Demo
+### Demo
 
 ```
 npm run demo
 ```
 
-## Usage
+### Usage
 
 ```javascript
 import Detector from 'detect-regex';
