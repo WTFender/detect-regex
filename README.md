@@ -36,11 +36,7 @@ console.log(detector.getPatternById('aws_api_key_spd'));
     pattern: /AKIA[0-9A-Z]{16}/,
     confidence: 'high',
     tags: [ 'cloud', 'aws' ],
-    group: {
-      id: 'spd',
-      name: 'mazen160/secrets-patterns-db',
-      ref: 'https://github.com/mazen160/secrets-patterns-db/blob/master/db/rules-stable.yml'
-    }                              */
+    source: 'spd'                   */
 console.log(detector.genDetectionStats(detections));
 /*
     patternTags: { cloud: 6, aws: 6 },
