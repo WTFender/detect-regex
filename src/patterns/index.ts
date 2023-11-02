@@ -1,9 +1,16 @@
 import curated from './curated.js';
-import group1 from './secrets_pattern_db.js';
-import group2 from './secret_regex_list.js';
-import group3 from './warp_secret_regex.js';
-import group4 from './yelp_detect_secrets.js';
-import group5 from './gitleaks.js';
+import source1 from './secrets_pattern_db.js';
+import source2 from './secret_regex_list.js';
+import source3 from './warp_secret_regex.js';
+import source4 from './yelp_detect_secrets.js';
+import source5 from './gitleaks.js';
+
+export interface PatternSources {
+  [key: string]: {
+    name: string;
+    ref?: string;
+  };
+}
 
 export interface Pattern {
   id: string;
@@ -12,86 +19,61 @@ export interface Pattern {
   description?: string;
   confidence?: 'curated' | 'high' | 'low';
   tags?: string[];
-  group: {
-    id: string;
-    name: string;
-    ref?: string;
-  };
+  source: keyof PatternSources;
   examples?: string[];
 }
 
-// set group info for each pattern group
-const defaultPatterns: Partial<Pattern>[] = [
-  ...curated.map((p) => ({
-    ...p,
-    group: {
-      id: 'curated',
-      name: 'Curated',
-    },
-  })),
-  ...group1.map((p) => ({
-    ...p,
-    group: {
-      id: 'spd',
-      name: 'mazen160/secrets-patterns-db',
-      ref: 'https://github.com/mazen160/secrets-patterns-db/blob/master/db/rules-stable.yml',
-    },
-  })),
-  ...group2.map((p) => ({
-    ...p,
-    group: {
-      id: 'srl',
-      name: 'h33tlit/secret-regex-list',
-      ref: 'https://github.com/h33tlit/secret-regex-list',
-    },
-  })),
-  ...group3.map((p) => ({
-    ...p,
-    group: {
-      id: 'warp',
-      name: 'warp.dev',
-      ref: 'https://docs.warp.dev/features/secret-redaction',
-    },
-  })),
-  ...group4.map((p) => ({
-    ...p,
-    group: {
-      id: 'yelp',
-      name: 'yelp/detect-secrets',
-      ref: 'https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins',
-    },
-  })),
-  ...group5.map((p) => ({
-    ...p,
-    group: {
-      id: 'gl',
-      name: 'gitleaks/gitleaks',
-      ref: 'https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml',
-    },
-  })),
-].map((pattern) => ({
-  // set group id as pattern id suffix to deconflict
-  // normalize pattern ids
-  ...pattern,
-  id: (
-    pattern.id?.replaceAll(' ', '_') +
-    '_' +
-    pattern.group!.id
-  ).toLowerCase(),
-}));
+export const defaultPatternSources: PatternSources = {
+  test: {
+    name: 'Test',
+    ref: 'test',
+  },
+  curated: {
+    name: 'Curated',
+    ref: 'Curated by WTFender/detect-regex',
+  },
+  spd: {
+    name: 'mazen160/secrets-patterns-db',
+    ref: 'https://github.com/mazen160/secrets-patterns-db/blob/master/db/rules-stable.yml',
+  },
+  srl: {
+    name: 'h33tlit/secret-regex-list',
+    ref: 'https://github.com/h33tlit/secret-regex-list',
+  },
+  warp: {
+    name: 'warp.dev',
+    ref: 'https://docs.warp.dev/features/secret-redaction',
+  },
+  yelp: {
+    name: 'yelp/detect-secrets',
+    ref: 'https://github.com/Yelp/detect-secrets/tree/master/detect_secrets/plugins',
+  },
+  gl: {
+    name: 'gitleaks/gitleaks',
+    ref: 'https://github.com/gitleaks/gitleaks/blob/master/config/gitleaks.toml',
+  },
+};
 
-export default [
+// set source info for pattern sources
+const defaultPatterns = [
   {
     id: 'test',
     name: 'Test Pattern',
     description: 'Test Pattern',
     category: 'generic',
     pattern: /97029097\d+696359494/,
-    group: {
-      id: 'test',
-      name: 'Test',
-      ref: 'Test',
-    },
+    source: 'test',
   },
-  ...defaultPatterns,
-] as Pattern[];
+  ...curated.map((p) => ({ ...p, source: 'curated' })),
+  ...source1.map((p) => ({ ...p, source: 'spd' })),
+  ...source2.map((p) => ({ ...p, source: 'srl' })),
+  ...source3.map((p) => ({ ...p, source: 'warp' })),
+  ...source4.map((p) => ({ ...p, source: 'yelp' })),
+  ...source5.map((p) => ({ ...p, source: 'gl' })),
+].map((pattern) => ({
+  // set source id as pattern prefix to deconflict
+  ...pattern,
+  id: (pattern.source + '_' + pattern.id?.replaceAll(' ', '_')).toLowerCase(),
+})) as Pattern[];
+
+export default defaultPatterns;

@@ -1,4 +1,8 @@
-import defaultPatterns, { type Pattern } from './patterns/index.js';
+import defaultPatterns, {
+  PatternSources,
+  type Pattern,
+  defaultPatternSources,
+} from './patterns/index.js';
 
 /* Pattern match result. */
 export interface PatternMatch {
@@ -20,9 +24,7 @@ export interface PatternStats {
   numPatterns: number;
   numPatternsUntagged: number;
   patternExampleIds: Pattern['id'][];
-  patternGroups: {
-    [key: string]: number;
-  };
+  patternSources: PatternSources;
   patternTags: {
     [key: string]: number;
   };
@@ -48,13 +50,15 @@ export default class Detector {
   name: string;
   modifiers: string;
   patterns: Pattern[];
+  sources: PatternSources;
   detection: DetectionResults;
 
-  constructor(print: boolean = false, patterns: Pattern[] = defaultPatterns) {
+  constructor(print: boolean = false) {
     this.print = print;
     this.name = 'RegexDetector';
     this.modifiers = 'gmi';
-    this.patterns = patterns;
+    this.patterns = defaultPatterns;
+    this.sources = defaultPatternSources;
     this.detection = {
       matches: [],
       patterns: [],
@@ -123,7 +127,7 @@ export default class Detector {
       patternExampleIds: patterns
         .filter((p) => p.examples !== undefined && p.examples.length > 0)
         .map((p) => p.id),
-      patternGroups: this._patternsUniqueGroupCount(patterns),
+      patternSources: this.sources,
       numPatterns: patterns.length,
       numPatternsUntagged: patterns.filter(
         (p) => p.tags === undefined || p.tags.length === 0
@@ -131,6 +135,7 @@ export default class Detector {
     };
   }
 
+  /*
   _patternsUniqueGroupCount(patterns: Pattern[]) {
     const patternGroups = patterns
       .filter((p) => p.group !== undefined)
@@ -145,6 +150,7 @@ export default class Detector {
     });
     return uniquePatternGroups;
   }
+  */
   _patternsUniqueTagCount(patterns: Pattern[]) {
     const patternTags = patterns
       .filter((p) => p.tags !== undefined && p.tags.length > 0)
