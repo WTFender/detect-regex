@@ -41,16 +41,20 @@ describe('Detector', () => {
     detection = detector.detect(defaultPatterns, JSON.stringify(sampleSecrets));
     const patternMatchIds = detection.matches.map((m) => m.id);
     // expect each pattern with an example to have a match
-    patternStats.patternExampleIds.forEach((patternId) => {
-      expect(patternMatchIds).toContain(patternId);
-    });
+    defaultPatterns
+      .filter((p) => p.examples !== undefined && p.examples.length > 0)
+      .forEach((p) => {
+        expect(patternMatchIds).toContain(p.id);
+      });
   });
 
   let detectionStats: PatternMatchStats;
   test('Parse detection stats', () => {
     detectionStats = detector.genDetectionStats();
-    patternStats.patternExampleIds.forEach((patternId) => {
-      expect(detectionStats.matchPatternIds).toContain(patternId);
-    });
+    defaultPatterns
+      .filter((p) => p.examples !== undefined && p.examples.length > 0)
+      .forEach((p) => {
+        expect(detectionStats.matchPatternIds).toContain(p.id);
+      });
   });
 });

@@ -23,7 +23,7 @@ export type DetectionResults = {
 export interface PatternStats {
   numPatterns: number;
   numPatternsUntagged: number;
-  patternExampleIds: Pattern['id'][];
+  numPatternsTested: number;
   patternSources: PatternSources;
   patternTags: {
     [key: string]: number;
@@ -124,9 +124,9 @@ export default class Detector {
   genPatternStats(patterns = this.patterns): PatternStats {
     return {
       patternTags: this._patternsUniqueTagCount(patterns),
-      patternExampleIds: patterns
-        .filter((p) => p.examples !== undefined && p.examples.length > 0)
-        .map((p) => p.id),
+      numPatternsTested: patterns.filter(
+        (p) => p.examples !== undefined && p.examples.length > 0
+      ).length,
       patternSources: this.sources,
       numPatterns: patterns.length,
       numPatternsUntagged: patterns.filter(
