@@ -69,12 +69,14 @@ const patterns: Partial<Pattern>[] = [
     pattern: /SG\.[a-zA-Z0-9_-]{22}\.[a-zA-Z0-9_-]{43}/,
     tags: ['app', 'sendgrid'],
   },
+  /* unsafe
   {
     id: 'SLACK_TOKEN',
     name: 'Slack Token',
     pattern: /xox(?:a|b|p|o|s|r)-(?:\d+-)+[a-z0-9]+/,
     tags: ['app', 'slack'],
   },
+  */
   {
     id: 'SLACK_WEBHOOK',
     name: 'Slack Webhook URL',

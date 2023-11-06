@@ -181,12 +181,14 @@ const patterns: Partial<Pattern>[] = [
     name: 'Infracost API Token',
     pattern: /\b(ico-[a-zA-Z0-9]{32})(?:['|"|\n|\r|\s|\x60|;]|$)/,
   },
+  /* unsafe
   {
     id: 'jwt',
     name: 'JSON Web Token',
     pattern:
       /\b(ey[a-zA-Z0-9]{17,}\.ey[a-zA-Z0-9/\\_-]{17,}\.(?:[a-zA-Z0-9/\\_-]{10,}={0,2})?)(?:['|"|\n|\r|\s|\x60|;]|$)/,
   },
+  */
   {
     id: 'jwt-base64',
     name: 'Base64-encoded JSON Web Token',
@@ -198,12 +200,14 @@ const patterns: Partial<Pattern>[] = [
     name: 'Linear API Token',
     pattern: /lin_api_[a-z0-9]{40}/,
   },
+  /* unsafe
   {
     id: 'microsoft-teams-webhook',
     name: 'Microsoft Teams Webhook',
     pattern:
       /https:\/\/[a-z0-9]+\.webhook\.office\.com\/webhookb2\/[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}@[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}\/IncomingWebhook\/[a-z0-9]{32}\/[a-z0-9]{8}-([a-z0-9]{4}-){3}[a-z0-9]{12}/,
   },
+  */
   {
     id: 'npm-access-token',
     name: 'npm access token',
@@ -348,6 +352,7 @@ const patterns: Partial<Pattern>[] = [
     name: 'Slack Legacy Workspace token',
     pattern: /(xox[ar]-(?:\d-)?[0-9a-zA-Z]{8,48})/,
   },
+  /* unsafe
   {
     id: 'slack-user-token',
     name: 'Slack User',
@@ -360,6 +365,7 @@ const patterns: Partial<Pattern>[] = [
       /(https?:\/\/)?hooks.slack.com\/(services|workflows)\/[A-Za-z0-9+/]{43,46}/,
     examples: ['SLACK_WEBHOOK_URL'],
   },
+  */
   {
     id: 'square-access-token',
     name: 'Square Access Token',

@@ -1,6 +1,24 @@
 import Detector, { PatternMatchStats, DetectionResults } from '../index';
-import defaultPatterns from '../patterns';
+import defaultPatterns, { Pattern } from '../patterns';
 import sampleSecrets from './secrets';
+import safe from 'safe-regex';
+
+const errs: Pattern[] = [];
+
+/**
+ * Handles errors thrown during individual pattern checks.
+ * @param checkName - The name of the check being performed.
+ * @throws An error with details of the failed pattern(s).
+ */
+function handleErrs(checkName: string) {
+  if (errs.length === 1) {
+    console.log(errs[0]);
+    throw new Error(`Pattern ${errs[0].id} failed ${checkName}`);
+  } else if (errs.length > 1) {
+    console.log(errs.map((p) => p.id));
+    throw new Error(`${errs.length} patterns failed ${checkName}`);
+  }
+}
 
 describe('Detector', () => {
   let detector: Detector;
@@ -13,7 +31,6 @@ describe('Detector', () => {
   test('Load default patterns', () => {
     patternStats = detector.genPatternStats();
     expect(patternStats.numPatterns).toBe(defaultPatterns.length);
-    console.log(patternStats);
   });
 
   test('Return patterns by ID', () => {
@@ -23,28 +40,53 @@ describe('Detector', () => {
     });
   });
 
-  test('Find individual pattern examples', () => {
+  test('Check patterns for DoS', () => {
+    defaultPatterns.forEach((p) => {
+      try {
+        const isSafe = safe(p.pattern);
+        expect(isSafe).toBe(true);
+      } catch (e) {
+        errs.push(p);
+      }
+    });
+    handleErrs('DoS check');
+  });
+
+  test('Detect individual pattern examples', () => {
     defaultPatterns.forEach((p) => {
       if (p.examples !== undefined) {
         // combine examples into multilinestring
         const examples = p.examples.map((ex) => sampleSecrets[ex]).join('\n');
-        // expect pattern match for each example
-        expect(p.examples.length).toBe(
-          detector.detect([p], examples).matches.length
-        );
+
+        try {
+          // expect pattern match for each example
+          expect(p.examples.length).toBe(
+            detector.detect([p], examples).matches.length
+          );
+        } catch (e) {
+          errs.push(e);
+        }
       }
     });
+    handleErrs('example detection');
   });
 
   let detection: DetectionResults;
-  test('Find all patterns in combined examples', () => {
+  test('Detect all patterns in combined examples', () => {
     detection = detector.detect(defaultPatterns, JSON.stringify(sampleSecrets));
     const patternMatchIds = detection.matches.map((m) => m.id);
     // expect each pattern with an example to have a match
     defaultPatterns
       .filter((p) => p.examples !== undefined && p.examples.length > 0)
       .forEach((p) => {
-        expect(patternMatchIds).toContain(p.id);
+        try {
+          expect(patternMatchIds).toContain(p.id);
+        } catch (e) {
+          console.log(p);
+          throw new Error(
+            `Pattern ${p.id} failed to match combined examples text`
+          );
+        }
       });
   });
 
@@ -54,7 +96,17 @@ describe('Detector', () => {
     defaultPatterns
       .filter((p) => p.examples !== undefined && p.examples.length > 0)
       .forEach((p) => {
-        expect(detectionStats.matchPatternIds).toContain(p.id);
+        if (!detectionStats.matchPatternIds.includes(p.id)) {
+          console.log(p);
+        }
+        try {
+          expect(detectionStats.matchPatternIds).toContain(p.id);
+        } catch (e) {
+          console.log(p);
+          throw new Error(
+            `Pattern ${p.id} not found in detection stats for combined example text`
+          );
+        }
       });
   });
 });

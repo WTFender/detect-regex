@@ -1,6 +1,7 @@
 import { Pattern } from './index.js';
 
 const patterns: Partial<Pattern>[] = [
+  /* unsafe
   {
     id: 'IPV4',
     name: 'IPV4 Address',
@@ -15,10 +16,11 @@ const patterns: Partial<Pattern>[] = [
     tags: ['generic', 'network'],
   },
   {
-    id: 'SLACK_TOKEN',
-    name: 'Slack App Token',
-    pattern: /\bxapp-[0-9]+-[A-Za-z0-9_]+-[0-9]+-[a-f0-9]+\b/,
-    tags: ['app', 'slack'],
+    id: 'MAC_ADDRESS',
+    name: 'MAC Address',
+    pattern:
+      /\b((([a-zA-z0-9]{2}[-:]){5}([a-zA-z0-9]{2}))|(([a-zA-z0-9]{2}:){5}([a-zA-z0-9]{2})))\b/,
+    tags: ['generic', 'network'],
   },
   {
     id: 'PHONE_NUMBER',
@@ -26,6 +28,7 @@ const patterns: Partial<Pattern>[] = [
     pattern: /\b(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}\b/,
     tags: ['generic', 'pii'],
   },
+  */
   {
     id: 'AWS_ACCESS_ID',
     name: 'AWS Access ID',
@@ -33,11 +36,10 @@ const patterns: Partial<Pattern>[] = [
     tags: ['cloud', 'aws'],
   },
   {
-    id: 'MAC_ADDRESS',
-    name: 'MAC Address',
-    pattern:
-      /\b((([a-zA-z0-9]{2}[-:]){5}([a-zA-z0-9]{2}))|(([a-zA-z0-9]{2}:){5}([a-zA-z0-9]{2})))\b/,
-    tags: ['generic', 'network'],
+    id: 'SLACK_TOKEN',
+    name: 'Slack App Token',
+    pattern: /\bxapp-[0-9]+-[A-Za-z0-9_]+-[0-9]+-[a-f0-9]+\b/,
+    tags: ['app', 'slack'],
   },
   {
     id: 'GOOGLE_API_KEY',
