@@ -80,6 +80,7 @@ export default class Detector {
   detect(patterns = this.patterns, text: string): DetectionResults {
     this.detection = { matches: [], patterns: [] };
     this.detection.patterns = patterns.map((p) => p.id) as Pattern['id'][];
+    this.log(`Detecting ${patterns.length} patterns`);
     patterns.forEach((p) => {
       this.detection.matches = this.detection.matches.concat(
         this._findOccurrences(p.id, new RegExp(p.pattern, this.modifiers), text)
