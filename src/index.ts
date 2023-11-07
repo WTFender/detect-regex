@@ -7,7 +7,7 @@ import defaultPatterns, {
 /* Pattern match result. */
 export interface PatternMatch {
   id: Pattern['id'];
-  match: string | string[];
+  match: string;
   line: number;
   column: number;
   replaced: boolean;
@@ -193,9 +193,9 @@ export default class Detector {
       } else {
         result.push({
           id: patternId,
-          match: match[0],
+          match: match[0]!,
           line: pos[0],
-          column: needle.lastIndex - pos[1] - match[0].length,
+          column: needle.lastIndex - pos[1] - match[0]!.length,
           replaced: false,
         });
       }
