@@ -285,7 +285,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
     <div style="margin-top: 2rem; width: 100%">
       <h3>
         3. Check detections
-        <span class="badge" v-if="detection.matches.length > 0">{{
+        <span class="badge" v-if="detection.matches?.length > 0">{{
           detection.matches.length
         }}</span>
       </h3>
