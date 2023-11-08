@@ -283,7 +283,12 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
       {{ selectedTagIds.length }} tags.
     </div>
     <div style="margin-top: 2rem; width: 100%">
-      <h3>3. Check detections</h3>
+      <h3>
+        3. Check detections
+        <span class="badge" v-if="detection.matches.length > 0">{{
+          detection.matches.length
+        }}</span>
+      </h3>
       <div style="margin-left: 2rem; margin-top: 1rem">
         <div v-if="selectedPatterns.length === 0">No patterns selected.</div>
         <div v-else-if="detection.matches.length === 0">No detections.</div>
