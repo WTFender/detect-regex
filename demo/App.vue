@@ -101,6 +101,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
       };
       this.tags.forEach((t) => (t.id === ex ? (t.checked = true) : (t.checked = false)));
       document.getElementById("inputText").value = examples[ex];
+      this.detect();
     },
     detect() {
       console.log(`detecting patterns`);
@@ -123,14 +124,14 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
         <a href="https://github.com/WTFender/detect-regex">WTFender/detect-regex</a>
       </h2>
       <p>Detect sensitive regular expressions in unstructured text.</p>
-      <div style="margin-top: 50px; width: 100%;">
+      <div style="margin-top: 2rem; width: 100%">
         <span class="badge">{{ patternStats.numPatterns }}</span> Patterns across
         <span class="badge">{{ Object.keys(patternStats.patternSources).length }}</span>
         sources containing
         <span class="badge">{{ Object.keys(patternStats.patternTags).length }}</span>
         tags.
       </div>
-      <h3 style="margin-top: 50px">Browse patterns</h3>
+      <h3 style="margin-top: 2rem">Browse patterns</h3>
       <input
         id="patternSearch"
         style="margin-top: 10px; width: 100%"
@@ -154,7 +155,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
       />
     </div>
   </header>
-  <main style="padding-top: 50px;">
+  <main style="padding-top: 2rem">
     <div>
       <h3>1. Paste text</h3>
       Examples: <a @click="setExample('generic')">Private Key</a>,
@@ -162,6 +163,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
       <a @click="setExample('slack')">Slack Webhook</a>
       <br />
       <textarea
+        @input="detect()"
         class="dark"
         id="inputText"
         rows="8"
@@ -169,7 +171,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
         style="width: 100%"
       ></textarea>
     </div>
-    <h3 style="margin-top: 50px">
+    <h3 style="margin-top: 2rem">
       2. Select patterns <span class="badge-inactive">{{ selectedPatterns.length }}</span>
     </h3>
     <form>
@@ -195,6 +197,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
             :id="`${t.id}-cbox`"
             v-model="t.checked"
             style="margin-right: 10px"
+            @change="detect()"
           />
           <label :for="`${t.id}-cbox`">{{ `${t.id} (${t.count})` }}</label>
         </div>
@@ -208,6 +211,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
             :id="s.name"
             v-model="s.checked"
             style="margin-right: 10px"
+            @change="detect()"
           />
           <a
             :href="s.ref.startsWith('https') ? s.ref : null"
@@ -218,19 +222,24 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
         </div>
       </div>
     </form>
-    <div>
-      <button
-        type="button"
-        @click="detect()"
-        style="margin-top: 50px; width: 60%; margin-left: 20%; height: 80px"
-        :disabled="selectedPatterns.length === 0"
-      >
-        <h2>Detect</h2>
-      </button>
-    </div>
-    <div style="padding-top: 2rem">
-      <h3 v-if="detection.patterns">Patterns detected</h3>
+    <br />
+    <div style="margin-top: 2rem; width: 100%">
+      <h3>3. Check detections</h3>
+      <div v-if="!detection.matches">No detections</div>
+      <div v-else>
+        <div
+          v-for="m in detection.matches"
+          style="background-color: #282c34; overflow: hidden; padding: 30px 20px"
+        >
+          <span class="badge">{{ m.id }}</span>
+          <span class="badge">{{ m.source }}</span>
+          <span class="badge">{{ m.score }}</span>
+          <span class="badge">{{ m.pattern }}</span>
+          <span class="badge">{{ m.match }}</span>
+        </div>
+      </div>
       <JsonViewer
+        style="display: none"
         v-if="detection.patterns"
         :value="detection"
         :expanded="true"
@@ -265,7 +274,8 @@ button:not(:disabled) {
 button:not(:disabled):hover {
   cursor: pointer;
 }
-.badge, .badge-inactive {
+.badge,
+.badge-inactive {
   background-color: hsla(160, 100%, 37%, 1);
   color: white;
   font-weight: bold;
