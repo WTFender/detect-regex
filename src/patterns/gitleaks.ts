@@ -321,36 +321,43 @@ const patterns: Partial<Pattern>[] = [
     id: 'slack-app-token',
     name: 'Slack App-level token',
     pattern: /(xapp-\d-[A-Z0-9]+-\d+-[a-z0-9]+)/,
+    tags: ['slack'],
   },
   {
     id: 'slack-bot-token',
     name: 'Slack Bot token',
     pattern: /(xoxb-[0-9]{10,13}-[0-9]{10,13}[a-zA-Z0-9-]*)/,
+    tags: ['slack'],
   },
   {
     id: 'slack-config-access-token',
     name: 'Slack Configuration access token',
     pattern: /(xoxe.xox[bp]-\d-[A-Z0-9]{163,166})/,
+    tags: ['slack'],
   },
   {
     id: 'slack-config-refresh-token',
     name: 'Slack Configuration refresh token',
     pattern: /(xoxe-\d-[A-Z0-9]{146})/,
+    tags: ['slack'],
   },
   {
     id: 'slack-legacy-bot-token',
     name: 'Slack Legacy bot token',
     pattern: /(xoxb-[0-9]{8,14}-[a-zA-Z0-9]{18,26})/,
+    tags: ['slack'],
   },
   {
     id: 'slack-legacy-token',
     name: 'Slack Legacy token',
     pattern: /(xox[os]-\d+-\d+-\d+-[a-fA-F\d]+)/,
+    tags: ['slack'],
   },
   {
     id: 'slack-legacy-workspace-token',
     name: 'Slack Legacy Workspace token',
     pattern: /(xox[ar]-(?:\d-)?[0-9a-zA-Z]{8,48})/,
+    tags: ['slack'],
   },
   /* unsafe
   {

@@ -13,7 +13,7 @@ const patterns: Partial<Pattern>[] = [
     id: 'SlACK_WEBHOOK_URL',
     name: "Slack Webhook URL",
     pattern: /https:\/\/hooks\.slack\.com\/services\/T[a-zA-Z0-9_]{8}\/B[a-zA-Z0-9_]{8}\/[a-zA-Z0-9_]{24}/,
-    category: 'app',
+    tags: ['slack'],
     // examples: ['SLACK_WEBHOOK_URL']
   },
   */
@@ -32,6 +32,7 @@ const patterns: Partial<Pattern>[] = [
     id: 'SLACK_TOKEN',
     name: 'Slack Token',
     pattern: /(xox[p|b|o|a]-[0-9]{12}-[0-9]{12}-[0-9]{12}-[a-z0-9]{32})/,
+    tags: ['slack'],
   },
   {
     id: 'PRIVATE_KEY_RSA',
