@@ -65,7 +65,11 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
       );
       if (p) {
         // replace regex pattern with string
-        return { ...p, pattern: p.pattern.source };
+        return {
+          ...p,
+          pattern: p.pattern.source,
+          source: this.detector.sources[p.source],
+        };
       }
       return '';
     },
@@ -122,9 +126,12 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
         aws: this.exampleAws,
         slack: this.exampleSlack,
         generic: this.exampleKey,
+        mix: `${this.exampleAws}\n${this.exampleSlack}\n${this.exampleKey}`,
       };
       this.tags.forEach((t) =>
-        t.id === ex ? (t.checked = true) : (t.checked = false)
+        ['aws', 'generic', 'slack'].includes(t.id)
+          ? (t.checked = true)
+          : (t.checked = false)
       );
       document.getElementById('inputText').value = examples[ex];
       this.detect();
@@ -148,7 +155,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
   <header>
     <div class="wrapper">
       <h2 style="width: 100%">
-        <a href="https://github.com/WTFender/detect-regex"
+        <a href="https://github.com/WTFender/detect-regex" target="_blank"
           >WTFender/detect-regex</a
         >
       </h2>
@@ -173,6 +180,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
       </h3>
       <input
         id="patternSearch"
+        type="search"
         style="margin-top: 10px; width: 100%; height: 2rem"
         list="patterns"
         placeholder="Select pattern ID..."
@@ -192,7 +200,6 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
         style="width: 100%"
         :value="searchPatternResult"
         :previewMode="true"
-        sort
         :theme="isDarkMode ? 'dark' : 'light'"
       />
     </div>
@@ -207,13 +214,13 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
         <a style="cursor: pointer" @click="setExample('aws')"
           >AWS Access Key ID</a
         >,
-        <a style="cursor: pointer" @click="setExample('slack')"
-          >Slack Webhook</a
-        >
+        <a style="cursor: pointer" @click="setExample('slack')">Slack Webhook</a
+        >,
+        <a style="cursor: pointer" @click="setExample('mix')">Mixed</a>
         <br />
         <textarea
           @input="detect()"
-          class="dark"
+          :class="{ dark: isDarkMode }"
           id="inputText"
           rows="8"
           cols="50"
@@ -260,6 +267,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
           />
           <a
             :href="s.ref.startsWith('https') ? s.ref : null"
+            target="_blank"
             :style="{ color: !s.ref.startsWith('https') ? 'inherit' : '' }"
           >
             {{ `${s.name} (${s.count})` }}
@@ -282,33 +290,21 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
         <div
           v-else
           v-for="(m, idx) in detection.matches"
-          style="
-            background-color: #282c34;
-            overflow: hidden;
-            margin-bottom: 5px;
-          "
+          style="overflow: hidden; margin-bottom: 5px"
           @click="
             detection.matches[idx].expanded = !detection.matches[idx].expanded
           "
           class="detection"
+          :class="{ dark: isDarkMode }"
         >
           <p style="padding: 10px; font-weight: bold; overflow: hidden">
-            {{ idx + 1 + '&nbsp;&nbsp;' }}
             {{ detector.getPatternById(m.id).name }}
-            <a
-              :href="
-                detector.sources[detector.getPatternById(m.id).source]?.ref
-              "
-              style="float: right"
-              >{{
-                detector.sources[detector.getPatternById(m.id).source]?.name
-              }}</a
-            >
             <span
               v-if="detector.getPatternById(m.id).confidence"
               class="badge-small"
               :style="{
-                'margin-left': '0.5rem',
+                float: 'right',
+                'margin-left': '.5rem',
                 'background-color':
                   detector.getPatternById(m.id).confidence === 'high'
                     ? 'red'
@@ -320,9 +316,35 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
             <span
               v-for="t in detector.getPatternById(m.id).tags"
               class="badge-small"
-              style="float: right; margin-right: 0.5rem"
+              style="margin-left: 0.5rem; float: right"
             >
               {{ t }}
+            </span>
+            <br />
+            <a
+              :href="
+                detector.sources[detector.getPatternById(m.id).source]?.ref
+              "
+              target="_blank"
+              style="float: right"
+              >{{
+                detector.sources[detector.getPatternById(m.id).source]?.name
+              }}</a
+            >
+            <span
+              class="badge-small badge-square"
+              style="background-color: rgb(86, 99, 112)"
+            >
+              Ln {{ m.line }}
+            </span>
+            <span class="badge-small badge-square"> Col {{ m.column }} </span>
+            <span
+              class="badge-small badge-square"
+              style="background-color: transparent"
+            >
+              {{
+                m.match.length < 32 ? m.match : m.match.substring(0, 32) + '...'
+              }}
             </span>
           </p>
           <div v-show="m.expanded">
@@ -376,9 +398,15 @@ button:not(:disabled):hover {
   color: inherit;
 }
 .badge-small {
+  background-color: lightslategray;
   font-size: x-small;
   margin: 0px;
   padding: 0px 10px;
+}
+.badge-square {
+  border-radius: 0px;
+  padding: 0px 2px;
+  font-weight: bold;
 }
 
 .detection {
