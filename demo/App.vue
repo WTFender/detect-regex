@@ -1,8 +1,8 @@
 <script>
-import { reactive, ref } from "vue";
-import { JsonViewer } from "vue3-json-viewer";
-import "vue3-json-viewer/dist/index.css";
-import Detector from "detect-regex";
+import { reactive, ref, setTransitionHooks } from 'vue';
+import { JsonViewer } from 'vue3-json-viewer';
+import 'vue3-json-viewer/dist/index.css';
+import Detector from 'detect-regex';
 export default {
   created() {
     const detector = new Detector(true);
@@ -27,6 +27,7 @@ export default {
     this.sources = sources;
     this.tags = tags;
     this.patternStats = this.detector.genPatternStats();
+    this.randomPattern();
   },
   data() {
     return {
@@ -35,10 +36,10 @@ export default {
       tags: [],
       sources: [],
       detection: {},
-      searchPatternId: "",
-      exampleAws: "AKIA2PEFT43H6DEVN475",
+      searchPatternId: '',
+      exampleAws: 'AKIA2PEFT43H6DEVN475',
       exampleSlack:
-        "https://hooks.slack.com/services/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",
+        'https://hooks.slack.com/services/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',
       exampleKey: `-----BEGIN RSA PRIVATE KEY-----
 MIICWwIBAAKBgQCthNauXQdklTvXltFgzWGY5M5vSnfVVGpRFok4QXNNpVYFn4yC
 E5Y3gZ/fArZ73CAIExf48F/pIlMnQbjKQn4TXhKmAEVQ8+nujm+9vk96yqotwPRI
@@ -59,12 +60,14 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
   components: {},
   computed: {
     searchPatternResult() {
-      const p = this.detector.patterns.find((p) => p.id === this.searchPatternId);
+      const p = this.detector.patterns.find(
+        (p) => p.id === this.searchPatternId
+      );
       if (p) {
         // replace regex pattern with string
         return { ...p, pattern: p.pattern.source };
       }
-      return "Select a pattern ID";
+      return '';
     },
     selectedSourceIds() {
       return this.sources.filter((s) => s.checked).map((s) => s.id);
@@ -77,7 +80,10 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
         .filter((p) => this.selectedSourceIds.includes(p.source))
         .map((p) => p.id);
       const tagPatternIds = this.detector.patterns
-        .filter((p) => "tags" in p && p.tags.some((t) => this.selectedTagIds.includes(t)))
+        .filter(
+          (p) =>
+            'tags' in p && p.tags.some((t) => this.selectedTagIds.includes(t))
+        )
         .map((p) => p.id);
       const patternIds = [...new Set(sourcePatternIds.concat(tagPatternIds))];
       return patternIds.map((pid) => this.detector.getPatternById(pid));
@@ -85,7 +91,7 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
     isDarkMode() {
       if (
         window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
+        window.matchMedia('(prefers-color-scheme: dark)').matches
       ) {
         return true;
       }
@@ -93,25 +99,46 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
     },
   },
   methods: {
+    prettyMatch(m) {
+      const pattern = this.detector.getPatternById(m.id);
+      return {
+        match: m.match,
+        line: m.line,
+        column: m.column,
+        pattern: {
+          ...pattern,
+          source: this.detector.sources[pattern.source],
+        },
+      };
+    },
+    randomPattern() {
+      const patternIds = this.detector.patterns.map((p) => p.id);
+      const randomPatternId =
+        patternIds[Math.floor(Math.random() * patternIds.length)];
+      this.searchPatternId = randomPatternId;
+    },
     setExample(ex) {
       const examples = {
         aws: this.exampleAws,
         slack: this.exampleSlack,
         generic: this.exampleKey,
       };
-      this.tags.forEach((t) => (t.id === ex ? (t.checked = true) : (t.checked = false)));
-      document.getElementById("inputText").value = examples[ex];
+      this.tags.forEach((t) =>
+        t.id === ex ? (t.checked = true) : (t.checked = false)
+      );
+      document.getElementById('inputText').value = examples[ex];
       this.detect();
     },
     detect() {
       console.log(`detecting patterns`);
-      this.detection = this.detector.detect(
+      const detection = this.detector.detect(
         this.selectedPatterns,
-        document.getElementById("inputText").value
+        document.getElementById('inputText').value
       );
-      if (this.detection.matches.length > 0) {
-        this.searchPatternId = this.detection.matches[0].id;
-      }
+      this.detection = {
+        patterns: detection.patterns,
+        matches: [...detection.matches.map((m) => ({ ...m, expanded: false }))],
+      };
     },
   },
 };
@@ -121,32 +148,47 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
   <header>
     <div class="wrapper">
       <h2 style="width: 100%">
-        <a href="https://github.com/WTFender/detect-regex">WTFender/detect-regex</a>
+        <a href="https://github.com/WTFender/detect-regex"
+          >WTFender/detect-regex</a
+        >
       </h2>
       <p>Detect sensitive regular expressions in unstructured text.</p>
       <div style="margin-top: 2rem; width: 100%">
-        <span class="badge">{{ patternStats.numPatterns }}</span> Patterns across
-        <span class="badge">{{ Object.keys(patternStats.patternSources).length }}</span>
+        <span class="badge">{{ patternStats.numPatterns }}</span> Patterns
+        across
+        <span class="badge">{{
+          Object.keys(patternStats.patternSources).length
+        }}</span>
         sources containing
-        <span class="badge">{{ Object.keys(patternStats.patternTags).length }}</span>
+        <span class="badge">{{
+          Object.keys(patternStats.patternTags).length
+        }}</span>
         tags.
       </div>
-      <h3 style="margin-top: 2rem">Browse patterns</h3>
+      <h3 style="margin-top: 2rem">
+        Browse patterns
+        <span class="dice" @click="randomPattern()" style="cursor: pointer"
+          >🎲</span
+        >
+      </h3>
       <input
         id="patternSearch"
-        style="margin-top: 10px; width: 100%"
+        style="margin-top: 10px; width: 100%; height: 2rem"
         list="patterns"
         placeholder="Select pattern ID..."
         v-model="searchPatternId"
       />
       <datalist id="patterns">
         <option
-          v-for="p in detector.patterns.sort((a, b) => a.name.localeCompare(b.name))"
+          v-for="p in detector.patterns.sort((a, b) =>
+            a.name.localeCompare(b.name)
+          )"
           :label="p.name"
           :value="p.id"
         />
       </datalist>
       <JsonViewer
+        v-if="searchPatternId !== ''"
         style="width: 100%"
         :value="searchPatternResult"
         :previewMode="true"
@@ -158,25 +200,30 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
   <main style="padding-top: 2rem">
     <div>
       <h3>1. Paste text</h3>
-      Examples: <a @click="setExample('generic')">Private Key</a>,
-      <a @click="setExample('aws')">AWS Access Key ID</a>,
-      <a @click="setExample('slack')">Slack Webhook</a>
-      <br />
-      <textarea
-        @input="detect()"
-        class="dark"
-        id="inputText"
-        rows="8"
-        cols="50"
-        style="width: 100%"
-      ></textarea>
-    </div>
-    <h3 style="margin-top: 2rem">
-      2. Select patterns <span class="badge-inactive">{{ selectedPatterns.length }}</span>
-    </h3>
-    <form>
-      <div style="float: left; margin-right: 20px">
+      <div style="margin-left: 2rem; margin-top: 1rem">
+        Examples:
+        <a style="cursor: pointer" @click="setExample('generic')">Private Key</a
+        >,
+        <a style="cursor: pointer" @click="setExample('aws')"
+          >AWS Access Key ID</a
+        >,
+        <a style="cursor: pointer" @click="setExample('slack')"
+          >Slack Webhook</a
+        >
         <br />
+        <textarea
+          @input="detect()"
+          class="dark"
+          id="inputText"
+          rows="8"
+          cols="50"
+          style="width: 100%"
+        ></textarea>
+      </div>
+    </div>
+    <h3 style="margin-top: 2rem">2. Select patterns</h3>
+    <form style="margin-left: 2rem; margin-top: 1rem">
+      <div style="float: left; margin-right: 20px">
         <h4>Tags</h4>
         <div v-for="t in tags.sort((a, b) => b.count - a.count).slice(0, 10)">
           <input
@@ -189,7 +236,6 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
         </div>
       </div>
       <div style="float: left; margin-right: 20px">
-        <br />
         <h4>&nbsp;</h4>
         <div v-for="t in tags.sort((a, b) => b.count - a.count).slice(10, 20)">
           <input
@@ -203,7 +249,6 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
         </div>
       </div>
       <div>
-        <br />
         <h4>Sources</h4>
         <div v-for="s in sources.sort((a, b) => a.name.localeCompare(b.name))">
           <input
@@ -223,30 +268,74 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
       </div>
     </form>
     <br />
+    <div style="text-align: center; margin-top: 4rem">
+      <span class="badge-inactive"></span>
+      {{ selectedPatterns.length }} patterns selected from
+      {{ selectedSourceIds.length }} sources and
+      {{ selectedTagIds.length }} tags.
+    </div>
     <div style="margin-top: 2rem; width: 100%">
       <h3>3. Check detections</h3>
-      <div v-if="!detection.matches">No detections</div>
-      <div v-else>
+      <div style="margin-left: 2rem; margin-top: 1rem">
+        <div v-if="selectedPatterns.length === 0">No patterns selected.</div>
+        <div v-else-if="detection.matches.length === 0">No detections.</div>
         <div
-          v-for="m in detection.matches"
-          style="background-color: #282c34; overflow: hidden; padding: 30px 20px"
+          v-else
+          v-for="(m, idx) in detection.matches"
+          style="
+            background-color: #282c34;
+            overflow: hidden;
+            margin-bottom: 5px;
+          "
+          @click="
+            detection.matches[idx].expanded = !detection.matches[idx].expanded
+          "
+          class="detection"
         >
-          <span class="badge">{{ m.id }}</span>
-          <span class="badge">{{ m.source }}</span>
-          <span class="badge">{{ m.score }}</span>
-          <span class="badge">{{ m.pattern }}</span>
-          <span class="badge">{{ m.match }}</span>
+          <p style="padding: 10px; font-weight: bold; overflow: hidden">
+            {{ idx + 1 + '&nbsp;&nbsp;' }}
+            {{ detector.getPatternById(m.id).name }}
+            <a
+              :href="
+                detector.sources[detector.getPatternById(m.id).source]?.ref
+              "
+              style="float: right"
+              >{{
+                detector.sources[detector.getPatternById(m.id).source]?.name
+              }}</a
+            >
+            <span
+              v-if="detector.getPatternById(m.id).confidence"
+              class="badge-small"
+              :style="{
+                'margin-left': '0.5rem',
+                'background-color':
+                  detector.getPatternById(m.id).confidence === 'high'
+                    ? 'red'
+                    : 'orange',
+              }"
+            >
+              {{ detector.getPatternById(m.id).confidence }}
+            </span>
+            <span
+              v-for="t in detector.getPatternById(m.id).tags"
+              class="badge-small"
+              style="float: right; margin-right: 0.5rem"
+            >
+              {{ t }}
+            </span>
+          </p>
+          <div v-show="m.expanded">
+            <JsonViewer
+              style="margin: 0px; padding: 0px"
+              :value="prettyMatch(m)"
+              :previewMode="true"
+              sort
+              :theme="isDarkMode ? 'dark' : 'light'"
+            />
+          </div>
         </div>
       </div>
-      <JsonViewer
-        style="display: none"
-        v-if="detection.patterns"
-        :value="detection"
-        :expanded="true"
-        :expandDepth="3"
-        sort
-        :theme="isDarkMode ? 'dark' : 'light'"
-      />
     </div>
   </main>
 </template>
@@ -260,7 +349,6 @@ FsLhwvxvOoX0Gm7Fx/esX3eyjGggRJhARFrvetKm/A==
   display: block;
   margin: 0 auto 2rem;
 }
-
 .link {
   cursor: pointer;
 }
@@ -275,18 +363,37 @@ button:not(:disabled):hover {
   cursor: pointer;
 }
 .badge,
+.badge-small,
 .badge-inactive {
   background-color: hsla(160, 100%, 37%, 1);
   color: white;
   font-weight: bold;
   padding: 4px 8px;
-  text-align: center;
-  border-radius: 5px;
+  border-radius: 8px;
 }
 .badge-inactive {
   background-color: inherit;
   color: inherit;
 }
+.badge-small {
+  font-size: x-small;
+  margin: 0px;
+  padding: 0px 10px;
+}
+
+.detection {
+  cursor: pointer;
+  border-radius: 8px;
+  border: solid transparent;
+}
+.detection:hover {
+  border: solid hsla(160, 100%, 37%, 1);
+}
+
+.dice:hover {
+  color: #fff;
+}
+
 @media (min-width: 1024px) {
   header {
     display: flex;
